@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ensure page background follows current theme */
+html,
+body {
+  background-color: hsl(var(--b1)) !important;
+}
+
+/* Disable touch highlighting for all elements */
+
+* {
+  -webkit-tap-highlight-color: transparent; /* For iOS Safari */
+  -webkit-touch-callout: none; /* Disable callout, iOS long-press menu */
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; /* Disable text selection on all elements */
+}
+
+/* Disable touch highlighting for all elements */
+
+/* scroll-bar 28, 28, 36*/
+
+*::-webkit-scrollbar {
+  width: 17px;
+}
+*::-webkit-scrollbar-track {
+  background: hsl(var(--b1));
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--b3));
+  border-radius: 14px;
+  border: 3px solid hsl(var(--b1));
+}
+
+/* scroll-bar*/
+
+/* loading */
+.loader {
+  width: 68px;
+  height: 68px;
+  border: 3px solid hsl(var(--bc));
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.loader::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 3px solid;
+  border-color: hsl(var(--p)) transparent;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* loading */
+
+/* skeleton */
+.skeleton {
+  animation: skeleton-loading 2s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(var(--b3));
+  }
+  100% {
+    background-color: hsl(var(--b2));
+  }
+}
+/* skeleton */
+
+/* search button*/
+.search-colour {
+  animation: search-loading 1s linear infinite alternate;
+}
+
+@keyframes search-loading {
+  0% {
+    background-color: hsl(var(--p) / 0.7);
+  }
+  100% {
+    background-color: hsl(var(--p));
+  }
+}
+/* search button*/
+
+/*sweetAlert custom*/
+
+.bordered-alert {
+  border: 1px solid hsl(var(--bc)) !important;
+}
+
+/*sweetAlert custom*/
+
+.select_header {
+  @apply font-epilogue font-bold sm:font-semibold text-[20px] text-primary text-left;
+}
+
+/* admin  button and input*/
+.btn_table {
+  @apply btn btn-xs sm:btn-sm border border-transparent font-semibold text-base-content bg-base-300 hover:bg-base-200 transition-all;
+}
+
+.btn_form {
+  @apply inline-flex justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-content hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+}
+
+.input_form {
+  @apply bg-base-100 border border-base-300 text-base-content text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-1;
+}
+
+.label_form {
+  @apply text-base-content text-sm font-medium;
+}
+/* admin table button and input*/
+
+/*login page button*/
+.btn_loginFormSecondary {
+  @apply flex items-center px-5 py-2 text-sm text-base-content transition-colors duration-200 bg-base-200 border border-base-300 rounded-lg gap-x-2 sm:w-auto;
+}
+.btn_loginFormPrimary {
+  @apply btn bg-primary hover:bg-primary/90 min-w-[75%] text-primary-content font-medium rounded-lg text-sm px-5 py-2.5 text-center;
+}
+
+.input_loinForm {
+  @apply border sm:text-sm rounded-lg block w-full p-2.5 bg-base-200 border-base-300 placeholder-base-content/60 text-base-content;
+}
+
+.label_loinForm {
+  @apply block mb-2 text-sm font-medium md:font-semibold text-base-content;
+}
+/*login page button*/
+
+.btn_sidebar {
+  @apply flex items-center px-4 py-2 transition-colors duration-300 transform rounded-lg text-base-content/60 hover:bg-base-200 hover:text-base-content;
+}
+
+.social-icon {
+  @apply w-6 md:w-4 hover:text-base-content;
+}

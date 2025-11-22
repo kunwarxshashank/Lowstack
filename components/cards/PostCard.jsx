@@ -1,0 +1,45 @@
+import Image from "next/image";
+import { useState } from "react";
+import PostViewDialogBox from "../models/PostViewDialogBox";
+
+const PostCard = ({ data }) => {
+  const description = data.description.slice(0, 120);
+  const shouldShowDots = data.description.length > 120;
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div
+      className="card rounded-xl cursor-pointer bg-base-200 hover:bg-base-300 p-3 shadow-md transition-colors"
+      title={data.description}
+      onClick={() => setIsOpen(true)}
+    >
+      <div className="flex flex-row items-center">
+        <div className="">
+          <figure className="w-[70px] h-[70px] md:w-20 md:h-20 bg-base-300 rounded-full overflow-hidden">
+            {/* Use the absolute path for the image */}
+            <Image 
+              src="/icons/doc.png" 
+              alt={data.description} 
+              width={70} 
+              height={70} 
+            />
+          </figure>
+        </div>
+        <div className="text-start ml-5">
+          <p className="text-base font-semibold font-sans md:font-mono mt-2 text-base-content">
+            {data.title}
+          </p>
+          <p className="text-sm font-medium md:font-semibold font-sans md:font-mono tracking-tighter md:tracking-normal text-gray-700 dark:text-gray-500 normal-case break-all">
+            {shouldShowDots ? `${description}...` : description}
+          </p>
+        </div>
+      </div>
+      {isOpen && (
+        <PostViewDialogBox isOpen={isOpen} setIsOpen={setIsOpen} data={data} />
+      )}
+    </div>
+  );
+};
+
+export default PostCard;
