@@ -20,9 +20,9 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         password: ${{ secrets.SERVER_PASS }}
         script: |
-          cd /home/madplay-api/htdocs/api.madplay.site
+          cd /home/lowstack/htdocs/lowstack.in
           git pull origin main
           npm install
           npm run build
-          pm2 delete madplayapi
-          pm2 start npm --name madplayapi -- start
+          pm2 delete lowstack
+          pm2 start npm --name lowstack -- start
