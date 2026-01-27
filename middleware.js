@@ -3,14 +3,13 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   function middleware(req) {
-    //return NextResponse
-    return NextResponse.rewrite(new URL("/dashboard", req.url));
+    return NextResponse.next();
   },
   {
     callbacks: {
-      authorized: ({ token }) => token?.role === token?.role,
+      authorized: ({ token }) => !!token,
     },
   }
 );
 
-export const config = { matcher: ["/dashboard","/api"] };
+export const config = { matcher: ["/dashboard/:path*"] };

@@ -6,6 +6,7 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 
 const Table = ({ data, columns, isLoading }) => {
   const [filtering, setFiltering] = useState("");
@@ -26,86 +27,98 @@ const Table = ({ data, columns, isLoading }) => {
   });
 
   return (
-    <div className="p-5 border-2 rounded-xl border-[#1dc071] bg-base-100 mb-5 ">
-      <div className="flex flex-col">
-        {/* filter input */}
-        <div className="item-start mb-3">
+    <div className="bg-base-100 rounded-xl shadow-sm border border-base-300 overflow-hidden mb-6">
+      <div className="p-4 border-b border-base-300 flex items-center justify-between gap-4">
+        <div className="relative w-full max-w-xs">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="h-4 w-4 text-base-content/50" />
+          </div>
           <input
             type="text"
-            placeholder="Search...."
+            placeholder="Search..."
             value={filtering}
             onChange={(e) => setFiltering(e.target.value)}
-            className="input input-bordered input-md sm:input-sm w-full max-w-xs"
+            className="input input-bordered input-sm w-full pl-10 focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
         </div>
-        {/* table */}
-        <div className="-m-1.5 overflow-x-auto">
-          <div className="p-1.5 min-w-full inline-block align-middle">
-            <div className="overflow-hidden border rounded-lg border-gray-700">
-              <table className="min-w-full divide-y divide-gray-700">
-                <thead>
-                  {table.getHeaderGroups().map((headerGroup, index) => (
-                    <tr key={index}>
-                      {headerGroup.headers.map((header, index) => (
-                        <th
-                          key={index}
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
-                        >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </th>
-                      ))}
-                    </tr>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="table w-full">
+          <thead className="bg-base-200/50 text-base-content/70">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody className="divide-y divide-base-200">
+            {isLoading ? (
+              <tr>
+                <td colSpan={columns.length} className="h-32 text-center">
+                  <span className="loading loading-spinner loading-md text-primary"></span>
+                </td>
+              </tr>
+            ) : table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <tr key={row.id} className="hover:bg-base-200/50 transition-colors">
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="px-6 py-4 whitespace-nowrap text-sm text-base-content"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
                   ))}
-                </thead>
-                <tbody className="divide-y divide-gray-700">
-                  {table.getRowModel().rows?.length ? (
-                    table.getRowModel().rows.map((row, index) => (
-                      <tr key={index}>
-                        {row.getVisibleCells().map((cell, index) => (
-                          <td
-                            key={index}
-                            className="px-6 py-4 whitespace-nowrap text-sm text-base-800 font-medium select-all"
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </td>
-                        ))}
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={columns.length} className="h-24 text-center">
-                        {isLoading ? "loading..." : "No results"}
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        {/* table controller */}
-        <div className="items-center justify-start py-4 space-x-2">
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={columns.length} className="h-32 text-center text-base-content/50">
+                  No results found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="p-4 border-t border-base-300 flex items-center justify-between">
+        <span className="text-sm text-base-content/60">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount() || 1}
+        </span>
+        <div className="flex gap-2">
           <button
-            className="btn_table"
+            className="btn btn-sm btn-outline"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
+            <ChevronLeft className="h-4 w-4" />
             Previous
           </button>
           <button
-            className="btn_table"
+            className="btn btn-sm btn-outline"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
             Next
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       </div>

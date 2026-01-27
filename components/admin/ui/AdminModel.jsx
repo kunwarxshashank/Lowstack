@@ -20,8 +20,7 @@ const AdminModel = ({
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={handleCloseModal}>
-        {/* The backdrop, rendered as a fixed sibling to the panel container */}
+      <Dialog as="div" className="relative z-50" onClose={handleCloseModal}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -31,12 +30,10 @@ const AdminModel = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         </Transition.Child>
 
-        {/* scrollable container */}
         <div className="fixed inset-0 overflow-y-auto">
-          {/* Container to center the panel */}
           <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child
               as={Fragment}
@@ -47,32 +44,32 @@ const AdminModel = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              {/* The actual dialog panel  */}
-              <Dialog.Panel className="w-full max-w-sm transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-base-100 p-6 text-left align-middle shadow-xl transition-all border border-base-300">
                 <Dialog.Title
                   as="h3"
-                  className="text-xl font-semibold leading-6 text-gray-900"
+                  className="text-xl font-semibold leading-6 text-base-content"
                 >
                   Edit User Profile
                 </Dialog.Title>
 
-                <Dialog.Description className="text-sm text-gray-500">
-                  This information is secret so be careful
+                <Dialog.Description className="text-sm text-base-content/60 mt-2">
+                  Update user details and role.
                 </Dialog.Description>
 
                 <div className="mt-4">
                   <form>
                     <div className="grid w-full items-center gap-4">
-                      <div className="flex flex-col space-y-1.5">
-                        <label className="label_form">User role</label>
-                        <ListBox
-                          value={userData.userRole}
-                          onChange={(newValue) => {
-                            setUserData({ ...userData, userRole: newValue });
-                          }}
-                          data={roles}
-                          style={{ bg: "bg-white" }}
-                        />
+                      <div className="flex flex-col space-y-4">
+                        <div>
+                          <label className="label_form mb-1 block">User role</label>
+                          <ListBox
+                            value={userData.userRole}
+                            onChange={(newValue) => {
+                              setUserData({ ...userData, userRole: newValue });
+                            }}
+                            data={roles}
+                          />
+                        </div>
 
                         <FormField
                           label="Name"
@@ -114,14 +111,14 @@ const AdminModel = ({
                         />
                       </div>
                     </div>
-                    <div className="mt-4 space-x-3">
+                    <div className="mt-6 flex justify-end gap-3">
                       <FormButtons
                         primaryLabel={isLoading ? "Updating..." : "Update"}
                         secondaryLabel="Cancel"
                         onPrimaryClick={handleSubmitButton}
                         onSecondaryClick={handleCloseModal}
-                        primaryClassName="btn_form"
-                        secondaryClassName="btn_form"
+                        primaryClassName="btn btn-primary"
+                        secondaryClassName="btn btn-ghost"
                       />
                     </div>
                   </form>

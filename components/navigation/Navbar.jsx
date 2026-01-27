@@ -127,21 +127,21 @@ const Navbar = () => {
         setIsPostOpen={setIsPostOpen}
         setPost={setPost}
       />
-      
+
       <div className="md:flex hidden flex-row justify-end gap-4 items-center">
 
-<Link href="/dashboard">
-  <button className="btn_sidebar border-1 bg-primary border-base-content font-bold shadow-lg !text-white">
-    Login
-  </button>
-</Link>
+        <Link href="/login">
+          <button className="btn_sidebar border-1 bg-primary border-base-content font-bold shadow-lg !text-white">
+            Login
+          </button>
+        </Link>
 
 
 
       </div>
 
       {/* Small screen navigation */}
-      
+
       <div className="sm:hidden flex justify-between items-center relative">
         <div
           className="w-[40px] h-[40px] rounded-[10px] bg-[#2c2f32] flex justify-center items-center cursor-pointer"
@@ -159,9 +159,8 @@ const Navbar = () => {
         </p>
 
         <div
-          className={`w-[34px] h-[34px] object-contain cursor-pointer transition-transform transform ${
-            toggleDrawer ? "rotate-45" : "rotate-0"
-          }`}
+          className={`w-[34px] h-[34px] object-contain cursor-pointer transition-transform transform ${toggleDrawer ? "rotate-45" : "rotate-0"
+            }`}
           onClick={handleToggleDrawer}
           ref={menuButtonRef}
         >
@@ -173,18 +172,16 @@ const Navbar = () => {
         </div>
 
         <div
-          className={`${
-            toggleDrawer ? "translate-x-0" : "-translate-x-full"
-          } fixed top-0 bottom-0 left-0 rounded-r-[10px] bg-[#1c1c24] z-10  py-5 w-[250px] transition-transform duration-1000 `}
+          className={`${toggleDrawer ? "translate-x-0" : "-translate-x-full"
+            } fixed top-0 bottom-0 left-0 rounded-r-[10px] bg-[#1c1c24] z-10  py-5 w-[250px] transition-transform duration-1000 `}
           ref={sidebarRef}
         >
           <ul className="mb-4 p-3">
             {navlinks.map((data) => (
               <li
                 key={data.name}
-                className={`flex p-4 ${
-                  isActive === data.name && "bg-[#3a3a43]"
-                } hover:bg-[#2c2f32] rounded-full`}
+                className={`flex p-4 ${isActive === data.name && "bg-[#3a3a43]"
+                  } hover:bg-[#2c2f32] rounded-full`}
                 onClick={() => {
                   setIsActive(data.name);
                   setToggleDrawer(false);
@@ -194,14 +191,12 @@ const Navbar = () => {
                 <Image
                   src={data.imgUrl}
                   alt={data.name}
-                  className={`w-[24px] h-[24px] object-contain ${
-                    isActive === data.name ? "grayscale-0" : "grayscale"
-                  }`}
+                  className={`w-[24px] h-[24px] object-contain ${isActive === data.name ? "grayscale-0" : "grayscale"
+                    }`}
                 />
                 <p
-                  className={`ml-[20px] font-epilogue font-semibold text-[14px] ${
-                    isActive === data.name ? "text-[#1dc071]" : "text-[#808191]"
-                  }`}
+                  className={`ml-[20px] font-epilogue font-semibold text-[14px] ${isActive === data.name ? "text-[#1dc071]" : "text-[#808191]"
+                    }`}
                 >
                   {data.name}
                 </p>

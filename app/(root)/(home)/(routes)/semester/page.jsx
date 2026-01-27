@@ -1,78 +1,92 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
+import { AcademicCapIcon, CalendarDaysIcon, SparklesIcon } from "@heroicons/react/24/outline";
 
 import { semester } from "@/constants";
 import DataCard from "@/components/cards/DataCard";
-import { usePostStore } from "@/libs/state/useStore";
 import NoDataFound from "@/components/ui/NoDataFound";
-import { filterSyllabus } from "@/libs/hooks/usefilter";
-import PostViewDialogBox from "@/components/models/PostViewDialogBox";
+import SkeletonLoading from "@/components/ui/SkeletonLoading";
+import { useBranchConfig } from "@/libs/hooks/useBranchConfig";
 
 const UserSemester = () => {
   const searchParams = useSearchParams();
-  const course = searchParams.get("name");
-  const category = searchParams.get("category");
+  const branch = searchParams.get("branch");
+  const university = searchParams.get("university");
 
-  const fetchedData = usePostStore((state) => state.posts);
+  const {
+    data: branchConfig,
+    error,
+    isLoading: loading,
+  } = useBranchConfig(branch);
 
-  const [isPostOpen, setIsPostOpen] = useState(false);
-  const [data, setData] = useState(null);
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const post = await filterSyllabus([course, category], fetchedData?.data);
-        const [syllabusData] = post.map((items) => items);
-
-        if (syllabusData) {
-          setIsPostOpen(true);
-          setData(syllabusData);
-        } else {
-          // Handle case where data is not found
-          setIsPostOpen(false);
-          setData(null);
-        }
-      } catch (error) {
-        // Handle error
-        console.error("Error fetching syllabus data:", error);
-      }
-    };
-
-    if (category === "Syllabus") {
-      fetchData();
-    }
-  }, [category, course, fetchedData]);
+  // Filter semesters based on branch configuration
+  const availableSemesters = useMemo(() => {
+    if (!branchConfig) return semester; // Default to all 8 if no config
+    return semester.slice(0, branchConfig.semester_count);
+  }, [branchConfig]);
 
   return (
-    <div>
-      <h1 className="select_header">Select Semester</h1>
-      <div className="items-center">
-          <div className="grid grid-cols-2 mt-[18px] gap-[18px]">
-            {semester.map((sem, index) => (
-              <DataCard
-                key={index}
-                hrefData={{
-                  pathname: `/view-subjects`,
-                  query: { name: course, category: category, sem: sem.link },
-                }}
-                data={sem}
-                altMsg="select your semester"
-                style="py-2"
-                syleName="text-base-content"
-                sem="Semester"
-              />
-            ))}
+    <div className="min-h-screen pb-8">
+      {/* Modern Header with Gradient */}
+      <div className="relative mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent p-6 sm:p-8 shadow-2xl">
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute -top-16 -right-16 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+        
+        {/* Content */}
+        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="p-2.5 bg-white/20 backdrop-blur-sm rounded-xl">
+            <CalendarDaysIcon className="w-7 h-7 sm:w-9 sm:h-9 text-white" />
           </div>
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight mb-2">
+              Select Your Semester
+            </h1>
+            <div className="flex flex-wrap items-center gap-2 text-white/90 text-xs sm:text-sm">
+              <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                <AcademicCapIcon className="w-3.5 h-3.5" />
+                <span className="font-medium uppercase">{university || "University"}</span>
+              </div>
+              <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                <SparklesIcon className="w-3.5 h-3.5" />
+                <span className="font-medium uppercase">{branch || "Branch"}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      {/* {isPostOpen && data && (
-        <PostViewDialogBox
-          isOpen={isPostOpen}
-          setIsOpen={setIsPostOpen}
-          data={data}
-        />
-      )} */}
+
+      {/* Semesters Grid */}
+      <div className="items-center">
+        {loading ? (
+          <SkeletonLoading />
+        ) : (
+          <>
+            {availableSemesters.length === 0 ? (
+              <NoDataFound />
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+                {availableSemesters.map((sem, index) => (
+                  <DataCard
+                    key={index}
+                    hrefData={{
+                      pathname: `/view-subjects`,
+                      query: { university: university, branch: branch, semester: sem.link },
+                    }}
+                    data={sem}
+                    altMsg="select your semester"
+                    style="py-2"
+                    syleName="text-base-content"
+                    sem="Semester"
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

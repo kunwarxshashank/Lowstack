@@ -110,6 +110,7 @@ export async function POST(req) {
       const newPost = await prisma.post.create({
         data: {
           userId: user.id,
+          university: fileDetails[i].university || "DEFAULT",
           course_name: fileDetails[i].course,
           semester_code: fileDetails[i].semester,
           subject_code: fileDetails[i].subject.link,
@@ -124,11 +125,25 @@ export async function POST(req) {
       createdPosts.push(newPost);
     }
 
+    // Award punya points for each uploaded post (10 points per upload)
+    const punyaPerUpload = 10;
+    const totalPunyaEarned = createdPosts.length * punyaPerUpload;
+    
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        punya: {
+          increment: totalPunyaEarned,
+        },
+      },
+    });
+
     return new Response(JSON.stringify({
       success: true,
       data: createdPosts,
-      message: `Successfully created ${createdPosts.length} post(s)`,
-      count: createdPosts.length
+      message: `Successfully created ${createdPosts.length} post(s)! You earned ${totalPunyaEarned} Punya points! 🎉`,
+      count: createdPosts.length,
+      punyaEarned: totalPunyaEarned
     }), {
       status: 201,
       headers: {
@@ -173,7 +188,7 @@ export async function DELETE(req) {
     const existingPost = await prisma.post.findUnique({
       where: { id: id },
     });
-    
+
     if (!existingPost) {
       return new Response(JSON.stringify({
         success: false,
@@ -207,7 +222,7 @@ export async function DELETE(req) {
     const deletedPost = await prisma.post.delete({
       where: { id: id },
     });
-    
+
     return new Response(JSON.stringify({
       success: true,
       data: deletedPost,
@@ -238,7 +253,7 @@ export async function DELETE(req) {
 
     return new Response(JSON.stringify({
       success: false,
-      error: "Internal server error", 
+      error: "Internal server error",
       message: error.message
     }), {
       status: 500,

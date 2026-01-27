@@ -24,6 +24,11 @@ export const navlinks = [
     link: "/",
   },
   {
+    name: "Hall of Punya",
+    imgUrl: important,
+    link: "/hallofpunya",
+  },
+  {
     name: "Login",
     imgUrl: addUser,
     link: "/dashboard",
@@ -67,78 +72,62 @@ export const category = [
   },
 ];
 
-//courses-items
-export const courses = [
-  {
-    id: 1,
-    name: "C.S.E",
-    imgUrl: cse,
-    link: "cse",
-    description: "C.S.E branch refers to the Computer Science and Engineering (CSE) field of engineering, which focuses on the design, development, and management of computer hardware and software systems. This broad discipline involves core subjects like algorithms, data structures, programming languages, and operating systems, leading to diverse career opportunities as software engineers, data scientists, and cybersecurity analysts. "
-  },
-  {
-    id: 2,
-    name: "A.I/M.L",
-    imgUrl: aiml,
-    link: "aiml",
-    description: "An AIML (Artificial Intelligence and Machine Learning) branch in engineering is a four-year undergraduate engineering program, often a specialization within Computer Science and Engineering, that focuses on building intelligent systems capable of human-like thinking and decision-making."
-  },
-  {
-    id: 2,
-    name: "A.I/D.S",
-    imgUrl: aids,
-    link: "aids",
-    description: "Artificial Intelligence and Data Science (AI&DS), a specialized engineering field focused on creating intelligent systems and extracting insights from data"
-  }
-];
 
+// semesters-items
 export const semester = [
   {
     id: 1,
-    name: "First",
-    link: "one",
+    name: "1",
+    link: "1",
     imgUrl: one,
   },
   {
     id: 2,
-    name: "Second",
-    link: "two",
+    name: "2",
+    link: "2",
     imgUrl: two,
   },
   {
     id: 3,
-    name: "Third",
-    link: "three",
+    name: "3",
+    link: "3",
     imgUrl: three,
   },
   {
     id: 4,
-    name: "Fourth",
-    link: "four",
+    name: "4",
+    link: "4",
     imgUrl: four,
   },
   {
     id: 5,
-    name: "Fifth",
-    link: "five",
+    name: "5",
+    link: "5",
     imgUrl: five,
   },
   {
     id: 6,
-    name: "Sixth",
-    link: "six",
+    name: "6",
+    link: "6",
     imgUrl: six,
   },
   {
     id: 7,
-    name: "Seventh",
-    link: "seven",
+    name: "7",
+    link: "7",
     imgUrl: seven,
   },
   {
     id: 8,
-    name: "Eighth",
-    link: "eight",
+    name: "8",
+    link: "8",
     imgUrl: eight,
   }
+];
+
+// Semester count options for admin configuration
+export const semesterCounts = [
+  { value: 4, label: "4 Semesters" },
+  { value: 6, label: "6 Semesters" },
+  { value: 8, label: "8 Semesters" }
 ];

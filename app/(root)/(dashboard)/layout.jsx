@@ -1,32 +1,10 @@
-"use client";
-
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import AdminNavbar from "@/components/admin/components/AdminNavbar";
-import AdminSidebar from "@/components/admin/components/AdminSidebar";
 import { ProtectedLayout } from "@/components/layouts/protectLayouts";
-import { ProctectAdminlayout } from "@/components/layouts/ProctectAdminlayout";
 
-export default function DashboardLayout({ children }) {
+export const metadata = {
+  title: "Admin panel | lowstack",
+  description: "study material web app for students",
+};
 
-  
-
-  return (
-    
-    <ProtectedLayout>
-      <section className="flex h-screen font-normal">
-        <div className="flex-1 flex flex-col overflow-auto">
-          <AdminNavbar label="Dashboard" />
-          <div className="flex flex-row">
-            <div className="md:block hidden">
-              <AdminSidebar />
-            </div>
-            <main className="p-5 md:p-4 items-start justify-center flex-grow">
-              {children}
-            </main>
-          </div>
-        </div>
-      </section>
-    </ProtectedLayout>
-  );
+export default function AdminLayout({ children }) {
+  return <ProtectedLayout>{children}</ProtectedLayout>;
 }

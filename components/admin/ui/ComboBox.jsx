@@ -22,11 +22,11 @@ const ComboBox = ({
     query === ""
       ? data
       : data.filter((data) =>
-          data.name
-            .toLowerCase()
-            .replace(/\s+/g, "")
-            .includes(query.toLowerCase().replace(/\s+/g, ""))
-        );
+        data.name
+          .toLowerCase()
+          .replace(/\s+/g, "")
+          .includes(query.toLowerCase().replace(/\s+/g, ""))
+      );
 
   return (
     <div className="relative w-full lg:w-72">
@@ -36,7 +36,7 @@ const ComboBox = ({
           <div className="relative w-full cursor-text overflow-hidden rounded-lg text-left border-black">
             <Combobox.Input
               className={classInput}
-              displayValue={(data) => data.name}
+              displayValue={(data) => data?.name || ""}
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -46,7 +46,7 @@ const ComboBox = ({
               />
             </Combobox.Button>
           </div>
-          
+
           {isloading && (
             <div className="absolute inset-y-0 pl-8 flex items-center pr-2 text-black gap-2">
               <SmallLoading />
@@ -80,8 +80,7 @@ const ComboBox = ({
                   <Combobox.Option
                     key={data.id}
                     className={({ active }) =>
-                      `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                        active ? "bg-green-400 text-white" : "text-gray-900"
+                      `relative cursor-pointer select-none py-2 pl-10 pr-4 ${active ? "bg-green-400 text-white" : "text-gray-900"
                       }`
                     }
                     value={data}
@@ -89,17 +88,15 @@ const ComboBox = ({
                     {({ selected, active }) => (
                       <>
                         <span
-                          className={`block truncate ${
-                            selected ? "font-medium" : "font-normal"
-                          }`}
+                          className={`block truncate ${selected ? "font-medium" : "font-normal"
+                            }`}
                         >
                           {data.name}
                         </span>
                         {selected ? (
                           <span
-                            className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                              active ? "text-white" : "text-green-400"
-                            }`}
+                            className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? "text-white" : "text-green-400"
+                              }`}
                           >
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />
                           </span>

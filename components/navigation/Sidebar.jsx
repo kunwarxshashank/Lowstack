@@ -28,7 +28,7 @@ const Sidebar = () => {
       </Link>
 
 
-      <div className="flex-1 flex flex-col justify-between items-center bg-base-200 rounded-[20px] w-[76px] py-4 mt-12 shadow-xl">
+      <div className="flex-1 flex flex-col justify-between items-center bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 rounded-[20px] w-[76px] py-4 mt-12 shadow-xl">
         <div className="flex flex-col justify-center items-center gap-3 ">
           {navlinks.map((data) => {
             return (

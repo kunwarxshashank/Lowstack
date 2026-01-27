@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import prisma from "@/libs/prisma";
 
-const authOptions = {
+export const authOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -66,10 +66,18 @@ const authOptions = {
         where: { id: token.id },
       });
 
-      session.user = {
-        ...token,
-        subscription: dbUser.subscription || null,
-      };
+      if (dbUser) {
+        session.user = {
+          ...session.user,
+          id: dbUser.id,
+          name: dbUser.name,
+          email: dbUser.email,
+          role: dbUser.userRole,
+          selectedUniversity: dbUser.selectedUniversity || null,
+          subscription: dbUser.subscription || null,
+          avatar: dbUser.avatar || null,
+        };
+      }
 
       return session;
     }

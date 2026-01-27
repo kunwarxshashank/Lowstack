@@ -8,13 +8,13 @@ const UploadDoneModel = ({ isOpen, setIsOpen }) => {
   const router = useRouter();
   const closeModal = () => {
     setIsOpen(false);
-    router.push("/dashboard");
+    // router.push("/dashboard"); // Removed redirect for admin dashboard flow
   };
 
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-50" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -24,7 +24,7 @@ const UploadDoneModel = ({ isOpen, setIsOpen }) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black/80" aria-hidden="true" />
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" aria-hidden="true" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -38,9 +38,9 @@ const UploadDoneModel = ({ isOpen, setIsOpen }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[#1c1c24] p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-base-100 p-6 text-left align-middle shadow-xl transition-all border border-base-300">
                   <XMarkIcon
-                    className="text-[#4acd8d] hover:text-gray-300 absolute top-4 right-4 text-lg  cursor-pointer w-6 h-6"
+                    className="text-base-content/60 hover:text-base-content absolute top-4 right-4 text-lg cursor-pointer w-6 h-6"
                     onClick={closeModal}
                   />
 
@@ -55,13 +55,13 @@ const UploadDoneModel = ({ isOpen, setIsOpen }) => {
 
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium text-center  leading-6 text-[#4acd8d]"
+                    className="text-lg font-medium text-center leading-6 text-primary"
                   >
                     Thank You :)
                   </Dialog.Title>
 
                   <div className="mt-2">
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-base-content/60 text-center">
                       Awesome! Your upload will make a big difference for
                       students, helping them perform better in their studies.
                     </p>
@@ -70,7 +70,7 @@ const UploadDoneModel = ({ isOpen, setIsOpen }) => {
                   <div className="mt-4 flex justify-center">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-gray-700 px-6 py-2 text-base font-medium text-[#4acd8d] hover:bg-gray-500"
+                      className="btn btn-primary"
                       onClick={closeModal}
                     >
                       ok

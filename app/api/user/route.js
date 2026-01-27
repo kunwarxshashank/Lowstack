@@ -6,7 +6,7 @@ export async function GET() {
   const session = await getServerSession();
   try {
     if (!session) {
-     // res.status(401).json({ message: "You must be logged in." });
+      // res.status(401).json({ message: "You must be logged in." });
       return new Response("You must be logged in.", {
         status: 401, // Internal Server Error
       });
@@ -30,7 +30,7 @@ export async function GET() {
 
 
 export async function POST(req) {
-  const { userRole, name, email, phoneNumber, password } = await req.json();
+  const { userRole, name, email, password, university } = await req.json();
 
   try {
     const existingUser = await prisma.user.findFirst({
@@ -74,7 +74,7 @@ export async function POST(req) {
         userRole,
         name,
         email,
-        phoneNumber,
+        university,
         password: hashedPassword,
         subscription: defaultSubscription, // Store as JSON object
         resetToken: null,
@@ -131,7 +131,7 @@ export async function DELETE(req) {
 }
 
 export async function PATCH(req) {
-  const { id, userRole, name, email, phoneNumber } = await req.json();
+  const { id, userRole, name, email } = await req.json();
   try {
     // Check if a user already exists by email
     const existingUser = await prisma.user.findFirst({
@@ -142,9 +142,7 @@ export async function PATCH(req) {
     const hasDataChanged =
       existingUser.userRole !== userRole ||
       existingUser.name !== name ||
-      existingUser.email !== email ||
-      existingUser.phoneNumber !== phoneNumber;
-
+      existingUser.email !== email
     if (!hasDataChanged) {
       return new Response("No changes were made", {
         status: 200, // OK
@@ -175,8 +173,7 @@ export async function PATCH(req) {
       data: {
         userRole: userRole,
         name,
-        email,
-        phoneNumber,
+        email
       },
     });
 

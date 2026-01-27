@@ -8,18 +8,21 @@ import { logo } from "@/public/assets";
 import FormButtons from "@/components/ui/FormButtons";
 import FormField from "@/components/ui/FormField";
 import { UserValidation } from "@/libs/validations/user";
+import universities from "@/constants/university.json";
 
 const RegisterPage = () => {
   const router = useRouter();
   const [userRole, setUserRole] = useState("USER");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNumber, setphoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [university, setUniversity] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
 
-   const handleSubmit = async (e) => {
+  // Filter universities that have an ID
+  const availableUniversities = universities.filter((uni) => uni.id);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -28,7 +31,7 @@ const RegisterPage = () => {
       email,
       name,
       password,
-      phoneNumber
+      university,
     };
 
     try {
@@ -47,15 +50,15 @@ const RegisterPage = () => {
           userRole,
           name,
           email,
-          phoneNumber,
-          password
+          password,
+          university,
         });
         if (response.statusText === "FAILED") {
           toast.error(response.data);
         } else {
-        toast.success("Successfully created");
-        handleReset();
-        router.push("/login");
+          toast.success("Successfully created");
+          handleReset();
+          router.push("/login");
         }
       }
     } catch (err) {
@@ -67,12 +70,12 @@ const RegisterPage = () => {
     }
   };
 
-const handleReset = () => {
-      setPassword("");
-      setName("");
-      setEmail("");
-      setphoneNumber("");
-};
+  const handleReset = () => {
+    setPassword("");
+    setName("");
+    setEmail("");
+    setUniversity("");
+  };
 
 
   return (
@@ -115,17 +118,6 @@ const handleReset = () => {
                 classLabel="label_loinForm"
                 classInput="input_loinForm"
               />
-               <FormField
-                label="Your Phone"
-                type="phone"
-                name="phoneNumber"
-                value={phoneNumber || "+91"}
-                placeholder="+919876543210"
-                onChange={(e) => setphoneNumber(e.target.value)}
-                autoComplete="email"
-                classLabel="label_loinForm"
-                classInput="input_loinForm"
-              />             
               <FormField
                 label="Your Password"
                 type="password"
@@ -137,6 +129,33 @@ const handleReset = () => {
                 classLabel="label_loinForm"
                 classInput="input_loinForm"
               />
+
+              <div>
+                <label
+                  htmlFor="university"
+                  className="block mb-2 text-sm font-medium text-base-content label_loinForm"
+                >
+                  Select University
+                </label>
+                <select
+                  id="university"
+                  name="university"
+                  value={university}
+                  onChange={(e) => setUniversity(e.target.value)}
+                  className="bg-base-50 border border-base-300 text-base-content sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 input_loinForm"
+                  required
+                >
+                  <option value="" disabled>
+                    Select your university
+                  </option>
+                  {availableUniversities.map((uni) => (
+                    <option key={uni.id} value={uni.id}>
+                      {uni.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="flex gap-1 mr-5 md:mr-0">
                 <FormButtons
                   primaryLabel={isLoading ? "Please wait..." : "Register"}
@@ -155,7 +174,7 @@ const handleReset = () => {
                 >
                   LOGIN
                 </a>
-              </p>              
+              </p>
             </form>
           </div>
         </div>

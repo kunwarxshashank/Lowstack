@@ -26,15 +26,7 @@ const User = z.object({
       invalid_type_error: "Name must be a string.",
     })
     .min(3, { message: "Name must be at least 4 characters long." })
-    .max(25, { message: "Name can be at most 30 characters long." }),
-  phoneNumber: z
-    .string({
-      required_error: "Phone number is required.",
-      invalid_type_error: "Phone number must be a string.",
-    })
-    .refine((phoneNumber) => /^(\+91)[0-9]{10}$/.test(phoneNumber), {
-      message: "Phone number must start with +91 and be 10 digits long.",
-    }),
+    .max(25, { message: "Name can be at most 30 characters long." })
 });
 
 const UserProfileUpdate = User.omit({ password: true });
@@ -43,18 +35,19 @@ const passwordValidation = User.omit({
   name: true,
   phoneNumber: true,
   email: true,
+  university: true,
 });
 
 export const UserValidation = {
   registration: User.required({
     email: true,
     name: true,
-    phoneNumber: true,
+    university: true,
   }),
   profileUpdate: UserProfileUpdate.required({
     email: true,
     name: true,
-    phoneNumber: true,
+    university: true,
   }),
   UserLogin: UserLoginValidation.required({
     email: true,

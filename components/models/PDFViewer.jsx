@@ -1,34 +1,58 @@
-"use client"
-import { useState, useEffect } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Download, Loader2 } from "lucide-react";
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
+"use client";
 
-// Set up the worker - using unpkg as a reliable CDN
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import {
+    ChevronLeft,
+    ChevronRight,
+    ZoomIn,
+    ZoomOut,
+    Download,
+    Loader2,
+} from "lucide-react";
+
+import { pdfjs } from "react-pdf";
+
+// ✅ IMPORTANT: Correct worker configuration
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    "pdfjs-dist/build/pdf.worker.min.js",
+    import.meta.url
+).toString();
+
+// Dynamically import react-pdf components (no SSR)
+const Document = dynamic(
+    () => import("react-pdf").then((m) => m.Document),
+    { ssr: false }
+);
+
+const Page = dynamic(
+    () => import("react-pdf").then((m) => m.Page),
+    { ssr: false }
+);
+
+// Load styles only on client
+if (typeof window !== "undefined") {
+    import("react-pdf/dist/Page/AnnotationLayer.css");
+    import("react-pdf/dist/Page/TextLayer.css");
+}
 
 const PDFViewer = () => {
     const [fileUrl, setFileUrl] = useState("");
     const [title, setTitle] = useState("");
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
-    const [scale, setScale] = useState(1.0);
+    const [scale, setScale] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Read query params (?url=...&title=...)
     useEffect(() => {
-        // Simulating searchParams - replace with actual implementation
-        const urlParams = new URLSearchParams(window.location.search);
-        const url = urlParams.get('url');
-        const fileTitle = urlParams.get('title');
-        
-        if (url) {
-            setFileUrl(decodeURIComponent(url));
-        }
-        if (fileTitle) {
-            setTitle(decodeURIComponent(fileTitle));
-        }
+        const params = new URLSearchParams(window.location.search);
+        const url = params.get("url");
+        const t = params.get("title");
+
+        if (url) setFileUrl(decodeURIComponent("https://pdfobject.com/pdf/sample.pdf"));
+        if (t) setTitle(decodeURIComponent(t));
     }, []);
 
     const onDocumentLoadSuccess = ({ numPages }) => {
@@ -66,6 +90,17 @@ const PDFViewer = () => {
         link.target = '_blank';
         link.click();
     };
+
+    if (!pdfjs) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800">
+                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                    <Loader2 className="animate-spin" size={24} />
+                    <span>Initializing PDF viewer...</span>
+                </div>
+            </div>
+        );
+    }
 
     if (!fileUrl) {
         return (
@@ -150,25 +185,23 @@ const PDFViewer = () => {
                             {error}
                         </div>
                     )}
-                    <Document
-                        file={fileUrl}
-                        onLoadSuccess={onDocumentLoadSuccess}
-                        onLoadError={onDocumentLoadError}
-                        loading={null}
-                        className="shadow-lg"
-                        options={{
-                            cMapUrl: 'https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/',
-                            cMapPacked: true,
-                        }}
-                    >
-                        <Page
-                            pageNumber={pageNumber}
-                            scale={scale}
-                            renderTextLayer={true}
-                            renderAnnotationLayer={true}
-                            className="bg-white"
-                        />
-                    </Document>
+                    {pdfjs && (
+                        <Document
+                            file={"https://pdfobject.com/pdf/sample.pdf"}
+                            onLoadSuccess={onDocumentLoadSuccess}
+                            onLoadError={onDocumentLoadError}
+                            loading={null}
+                            className="shadow-lg"
+                        >
+                            <Page
+                                pageNumber={pageNumber}
+                                scale={scale}
+                                renderTextLayer={true}
+                                renderAnnotationLayer={true}
+                                className="bg-white"
+                            />
+                        </Document>
+                    )}
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import fetcher from "../fetcher";
+import { fetcher } from "../fetcher";
 
 const useSubject = () => {
   const { data, error, isLoading, mutate } = useSWR("/api/subject", fetcher);
@@ -24,8 +24,10 @@ const useUserSubject = ({ userID }) => {
   };
 };
 
-const useFilterSubject = ({ course, semester }) => {
-  const key = `/api/subject/filter/${course}/${semester}`;
+const useFilterSubject = ({ course, semester, university }) => {
+  const key = university
+    ? `/api/subject/filter/${course}/${semester}?university=${university}`
+    : `/api/subject/filter/${course}/${semester}`;
   const { data, error, isLoading, mutate } = useSWR(key, fetcher);
   return {
     data,

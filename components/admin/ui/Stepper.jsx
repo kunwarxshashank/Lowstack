@@ -1,19 +1,17 @@
 const Stepper = ({ steps, activeStep }) => {
   return (
-    <ol className="flex items-center py-1 space-x-2 sm:space-x-4 text-sm sm:text-base font-medium text-center text-gray-400">
+    <ol className="flex items-center py-1 space-x-2 sm:space-x-4 text-sm sm:text-base font-medium text-center text-base-content/40">
       {steps.map((step, index) => {
         const isCompleted = index <= activeStep;
         return (
           <li
             key={index}
-            className={`flex items-center ${
-              isCompleted ? "text-green-400" : "text-gray-400"
-            }`}
+            className={`flex items-center ${isCompleted ? "text-primary" : "text-base-content/40"
+              }`}
           >
             <span
-              className={`flex items-center justify-center w-5 h-5 mr-2 text-xs border rounded-full shrink-0 ${
-                isCompleted ? "border-green-400 " : "border-gray-400"
-              }`}
+              className={`flex items-center justify-center w-5 h-5 mr-2 text-xs border rounded-full shrink-0 ${isCompleted ? "border-primary" : "border-base-content/40"
+                }`}
             >
               {index + 1}
             </span>

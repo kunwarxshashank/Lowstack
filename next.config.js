@@ -11,6 +11,30 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@react-pdf/renderer'],
   },
+  webpack: (config, { isServer }) => {
+    // Handle canvas for pdfjs-dist
+    config.resolve.alias.canvas = false;
+
+    // Fix pdfjs-dist worker resolution for client-side
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+      };
+
+      // Add rule to handle PDF.js worker files
+      config.module.rules.push({
+        test: /pdf\.worker\.(min\.)?mjs$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/worker/[hash][ext][query]'
+        }
+      });
+    }
+
+    return config;
+  },
 };
 
 // Configuration object tells the next-pwa plugin
