@@ -1,4 +1,4 @@
-import { about, addUser, dashboard, upload, login } from "@/public/assets";
+import { about, addUser, dashboard, upload, login, favourite } from "@/public/assets";
 import {
   important,
   qp,
@@ -37,6 +37,11 @@ export const navlinks = [
     name: "Quick Links",
     imgUrl: about,
     link: "/quicklinks",
+  },
+  {
+    name: "Favourites",
+    imgUrl: favourite,
+    link: "/favourites",
   }
 ];
 

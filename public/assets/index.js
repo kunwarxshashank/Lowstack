@@ -17,6 +17,7 @@ import SettingIcon from "./SettingIcon";
 import AdminuploadIcon from "./AdminuploadIcon";
 import AdminPremiumIcon from "./AdminPremiumIcon";
 import SmallLoading from "./SmallLoading";
+import favourite from "./favourite.svg";
 
 export {
   addUser,
@@ -38,4 +39,5 @@ export {
   AdminuploadIcon,
   AdminPremiumIcon,
   SmallLoading,
+  favourite,
 };

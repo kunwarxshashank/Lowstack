@@ -20,12 +20,14 @@ import {
   PaperAirplaneIcon,
   UserCircleIcon,
   ChatBubbleLeftRightIcon,
-  TrashIcon
+  TrashIcon,
+  HeartIcon
 } from "@heroicons/react/24/outline";
 import {
   HandThumbUpIcon as HandThumbUpSolidIcon,
   HandThumbDownIcon as HandThumbDownSolidIcon,
-  EyeIcon as EyeSolidIcon
+  EyeIcon as EyeSolidIcon,
+  HeartIcon as HeartSolidIcon
 } from "@heroicons/react/24/solid";
 import { handlesharebtn } from "@/libs/utils";
 import axios from "axios";
@@ -43,6 +45,8 @@ const PostViewDialogBox = ({ isOpen, setIsOpen, data }) => {
   const [reportDescription, setReportDescription] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+  const [isFavourite, setIsFavourite] = useState(false);
+  const [isTogglingFavourite, setIsTogglingFavourite] = useState(false);
 
   // Only update state when modal opens with new data
   useEffect(() => {
@@ -50,8 +54,39 @@ const PostViewDialogBox = ({ isOpen, setIsOpen, data }) => {
       setPostData(data);
       setHasViewed(false);
       fetchComments(data.id);
+      if (session) {
+        checkFavouriteStatus(data.id);
+      }
     }
-  }, [isOpen, data?.id]);
+  }, [isOpen, data?.id, session]);
+
+  const checkFavouriteStatus = async (postId) => {
+    try {
+      const res = await axios.get(`/api/post/favourite?postId=${postId}`);
+      setIsFavourite(res.data.isFavourite);
+    } catch (error) {
+      console.error("Error checking favourite status", error);
+    }
+  };
+
+  const handleToggleFavourite = async () => {
+    if (!session) {
+      toast.error("Please login to add to favourites");
+      return;
+    }
+    if (isTogglingFavourite) return;
+
+    setIsTogglingFavourite(true);
+    try {
+      const res = await axios.post("/api/post/favourite", { postId: postData.id });
+      setIsFavourite(res.data.isFavourite);
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error("Failed to update favourites");
+    } finally {
+      setIsTogglingFavourite(false);
+    }
+  };
 
   const fetchComments = async (postId) => {
     try {
@@ -407,6 +442,23 @@ const PostViewDialogBox = ({ isOpen, setIsOpen, data }) => {
                         title="Report this note"
                       >
                         <FlagIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </button>
+
+                      {/* Favourite Button */}
+                      <button
+                        onClick={handleToggleFavourite}
+                        disabled={isTogglingFavourite}
+                        className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-bold transition-all duration-300 active:scale-95 sm:hover:scale-105 hover:shadow-lg ${isFavourite
+                            ? "bg-rose-100 text-rose-500 hover:bg-rose-200 hover:shadow-rose-200/30"
+                            : "bg-base-content/5 text-base-content/70 hover:bg-rose-50 hover:text-rose-500 hover:shadow-rose-100/30"
+                          }`}
+                        title={isFavourite ? "Remove from favourites" : "Add to favourites"}
+                      >
+                        {isFavourite ? (
+                          <HeartSolidIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        ) : (
+                          <HeartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        )}
                       </button>
                     </div>
 
