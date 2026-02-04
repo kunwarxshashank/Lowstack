@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { formatFileSize } from "@edgestore/react/utils";
+import { formatFileSize } from "@/libs/utils";
 import { useEffect, useState, useMemo } from "react";
 import { DocumentTextIcon, TrashIcon } from "@heroicons/react/20/solid";
 
@@ -258,6 +258,7 @@ const DocDetails = ({
                       data={filteredCategory}
                       style={{ bg: "bg-base-200" }}
                     />
+
                   </div>
                 </div>
                 <div>

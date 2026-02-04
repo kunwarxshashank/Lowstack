@@ -54,4 +54,19 @@ const handlesharebtn = (post) => {
   }
 };
 
-export { handleSignOutButton, handlesharebtn };
+/**
+ * Format file size in bytes to human-readable format
+ * @param {number} bytes - File size in bytes
+ * @returns {string} - Formatted file size (e.g., "1.5 MB")
+ */
+const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 Bytes';
+
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+};
+
+export { handleSignOutButton, handlesharebtn, formatFileSize };

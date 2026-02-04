@@ -14,20 +14,24 @@ import {
     Flag,
 } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const AdminSidebar = ({ isOpen, setIsOpen, activeView, setActiveView }) => {
 
+    const { data: session } = useSession();
+    const isAdmin = session?.user?.role === "ADMIN";
+
     const links = [
-        { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+        { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, adminOnly: true },
         { id: "profile", label: "Profile", icon: User },
-        { id: "users", label: "Users", icon: Users },
+        { id: "users", label: "Users", icon: Users, adminOnly: true },
         { id: "content", label: "Content", icon: FileText },
         { id: "upload", label: "Upload", icon: UploadCloud },
-        { id: "subjects", label: "Subjects", icon: BookOpen },
-        { id: "branch", label: "Branch Config", icon: GitBranch },
-        { id: "reports", label: "Reports", icon: Flag },
+        { id: "subjects", label: "Subjects", icon: BookOpen, adminOnly: true },
+        { id: "branch", label: "Branch Config", icon: GitBranch, adminOnly: true },
+        { id: "reports", label: "Reports", icon: Flag, adminOnly: true },
         // { id: "settings", label: "Settings", icon: Settings },
-    ];
+    ].filter(link => isAdmin || !link.adminOnly);
 
     return (
         <>

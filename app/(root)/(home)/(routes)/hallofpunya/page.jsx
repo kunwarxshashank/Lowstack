@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { TrophyIcon, FireIcon, SparklesIcon, UserIcon } from "@heroicons/react/24/solid";
+import { FireIcon, SparklesIcon, UserIcon } from "@heroicons/react/24/solid";
 import { StarIcon } from "@heroicons/react/24/outline";
 import useSWR from "swr";
 import { fetcher } from "@/libs/fetcher";
+import Image from "next/image";
+import punya from "@/public/assets/punya.svg";
 
 const HallOfPunya = () => {
     const { data: response, isLoading, error } = useSWR("/api/leaderboard?limit=50", fetcher);
@@ -73,7 +75,13 @@ const HallOfPunya = () => {
                 <div className="relative z-10 max-w-6xl mx-auto text-center">
                     <div className="flex justify-center mb-4 sm:mb-6">
                         <div className="relative">
-                            <TrophyIcon className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 text-yellow-300 animate-bounce" />
+                            <Image
+                                src={punya}
+                                alt="Punya Trophy"
+                                width={80}
+                                height={80}
+                                className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 animate-bounce"
+                            />
                             <SparklesIcon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-yellow-200 absolute -top-1 sm:-top-2 -right-1 sm:-right-2 animate-ping" />
                         </div>
                     </div>
@@ -100,14 +108,14 @@ const HallOfPunya = () => {
                         {leaderboard.map((user, index) => {
                             const isTopThree = user.rank <= 3;
                             const rankColor = getRankColor(user.rank);
-                            
+
                             return (
                                 <div
                                     key={user.id}
                                     className={`
                                         relative rounded-xl sm:rounded-2xl transition-all duration-500 active:scale-95 sm:hover:scale-[1.02]
-                                        ${isTopThree 
-                                            ? `bg-gradient-to-r ${rankColor} p-0.5 sm:p-1 shadow-xl sm:shadow-2xl hover:shadow-3xl` 
+                                        ${isTopThree
+                                            ? `bg-gradient-to-r ${rankColor} p-0.5 sm:p-1 shadow-xl sm:shadow-2xl hover:shadow-3xl`
                                             : 'bg-base-100 shadow-md hover:shadow-xl border border-base-300 hover:border-primary'
                                         }
                                         ${animateCards ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}
@@ -176,8 +184,8 @@ const HallOfPunya = () => {
                                         <div className="flex-shrink-0 text-right">
                                             <div className={`
                                                 inline-flex items-center gap-1.5 sm:gap-2 text-white rounded-full font-bold shadow-md sm:shadow-lg
-                                                ${isTopThree 
-                                                    ? `bg-gradient-to-r ${rankColor} px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 text-base sm:text-lg md:text-xl` 
+                                                ${isTopThree
+                                                    ? `bg-gradient-to-r ${rankColor} px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 text-base sm:text-lg md:text-xl`
                                                     : 'bg-gradient-to-r from-orange-500 to-red-500 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 text-sm sm:text-base'
                                                 }
                                             `}>
@@ -198,7 +206,15 @@ const HallOfPunya = () => {
                 {/* Empty state */}
                 {leaderboard.length === 0 && (
                     <div className="text-center py-12 sm:py-16 md:py-20 px-4">
-                        <TrophyIcon className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-base-content/20 mx-auto mb-4 sm:mb-6" />
+                        <div className="mx-auto mb-4 sm:mb-6 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 opacity-20">
+                            <Image
+                                src={punya}
+                                alt="No Punya Yet"
+                                width={100}
+                                height={100}
+                                className="w-full h-full"
+                            />
+                        </div>
                         <h3 className="text-xl sm:text-2xl font-bold text-base-content mb-2 sm:mb-3">
                             No contributors yet!
                         </h3>

@@ -1,8 +1,7 @@
 // app/api/post/route.js - Improved version with consistent response structure
 
 import prisma from "@/libs/prisma";
-import { unlink } from "fs/promises";
-import path from "path";
+import { deleteFromS3 } from "@/libs/s3";
 
 export async function GET() {
   try {
@@ -128,7 +127,7 @@ export async function POST(req) {
     // Award punya points for each uploaded post (10 points per upload)
     const punyaPerUpload = 10;
     const totalPunyaEarned = createdPosts.length * punyaPerUpload;
-    
+
     await prisma.user.update({
       where: { id: user.id },
       data: {
@@ -202,20 +201,14 @@ export async function DELETE(req) {
       });
     }
 
-    // Try to delete local uploaded file if the URL points to /uploads/*
+    // Try to delete file from S3
     const fileUrl = existingPost.file_url;
     if (fileUrl) {
       try {
-        const url = new URL(fileUrl);
-        const uploadsIndex = url.pathname.indexOf('/uploads/');
-        if (uploadsIndex !== -1) {
-          const relativePath = url.pathname.replace(/^\//, ''); // remove leading '/'
-          const absolutePath = path.join(process.cwd(), relativePath);
-          await unlink(absolutePath);
-        }
+        await deleteFromS3(fileUrl);
       } catch (fsErr) {
-        // Ignore deletion errors (file may already be gone or remote URL)
-        console.warn('File delete warning:', fsErr?.message || fsErr);
+        // Ignore deletion errors (file may already be gone)
+        console.warn('S3 file delete warning:', fsErr?.message || fsErr);
       }
     }
 

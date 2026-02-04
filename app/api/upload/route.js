@@ -1,8 +1,6 @@
-import { writeFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
 import { NextResponse } from 'next/server';
 import { PDFDocument, PDFName, StandardFonts, rgb } from 'pdf-lib';
+import { uploadToS3 } from '@/libs/s3';
 
 export async function POST(request) {
   try {
@@ -30,17 +28,13 @@ export async function POST(request) {
       return NextResponse.json({ error: 'File too large' }, { status: 400 });
     }
 
-    const fileExtension = path.extname(file.name);
-    const fileNameWithoutExt = path.basename(file.name, fileExtension);
+    // Generate unique filename
+    const fileExtension = file.name.split('.').pop();
+    const fileNameWithoutExt = file.name.replace(`.${fileExtension}`, '');
     const timestamp = Date.now();
-    const uniqueFileName = `${fileNameWithoutExt}-${timestamp}${fileExtension}`;
+    const uniqueFileName = `${fileNameWithoutExt}-${timestamp}.${fileExtension}`;
 
-    const uploadDir = path.join(process.cwd(), 'uploads', uploadType);
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
-
-    const filePath = path.join(uploadDir, uniqueFileName);
+    // Get file buffer
     const arrayBuffer = await file.arrayBuffer();
     let buffer = Buffer.from(arrayBuffer);
 
@@ -133,15 +127,15 @@ export async function POST(request) {
         const headerText = 'LOWSTACK.IN';
         const headerFontSize = 14;
         const marginTop = 6;
-        
+
         pdfDoc.getPages().forEach((page, idx) => {
           if (idx === 0) return;
-          
+
           const { width, height } = page.getSize();
           const textWidth = boldFont.widthOfTextAtSize(headerText, headerFontSize);
           const x = (width - textWidth) / 2;
           const y = height - headerFontSize - marginTop;
-          
+
           page.drawText(headerText, {
             x,
             y,
@@ -186,9 +180,8 @@ export async function POST(request) {
       }
     }
 
-    await writeFile(filePath, buffer);
-
-    const fileUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://lowstack.in'}/uploads/${uploadType}/${uniqueFileName}`;
+    // Upload to S3
+    const fileUrl = await uploadToS3(buffer, uniqueFileName, file.type, uploadType);
 
     return NextResponse.json({
       success: true,

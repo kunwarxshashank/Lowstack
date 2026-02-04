@@ -2,7 +2,6 @@ import { Toaster } from "sonner";
 import Script from 'next/script'
 
 import "../globals.css";
-import { EdgeStoreProvider } from "@/libs/edgestore";
 import AuthProvider from "@/components/layouts/ProviderLayouts";
 
 export const metadata = {
@@ -73,10 +72,8 @@ export default function RootLayout({ children }) {
       <body className="min-h-screen bg-base-100 text-base-content transition-colors duration-300">
         <Script defer src='https://cloud.umami.is/script.js' data-website-id='185225b6-6381-46c7-8afd-a753b57db4a4' />
         <AuthProvider>
-          <EdgeStoreProvider>
-            <Toaster richColors closeButton position="top-center" />
-            {children}
-          </EdgeStoreProvider>
+          <Toaster richColors closeButton position="top-center" />
+          {children}
         </AuthProvider>
       </body>
     </html>

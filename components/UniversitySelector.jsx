@@ -9,7 +9,7 @@ import { AcademicCapIcon, SparklesIcon } from "@heroicons/react/24/solid";
  * Modern, stylish university selector with card-based layout
  * Used for FTUE and university switching
  */
-export default function UniversitySelector({ isOpen, onClose, onSelect, universities }) {
+export default function UniversitySelector({ isOpen, onClose, onSelect, universities, selectedId }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [hoveredId, setHoveredId] = useState(null);
 
@@ -32,6 +32,14 @@ export default function UniversitySelector({ isOpen, onClose, onSelect, universi
         onClose();
     };
 
+    const handleClose = () => {
+        // If no university is currently selected (FTUE), select the first one
+        if (!selectedId && universities && universities.length > 0) {
+            onSelect(universities[0]);
+        }
+        onClose();
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -43,16 +51,16 @@ export default function UniversitySelector({ isOpen, onClose, onSelect, universi
                     <div className="absolute inset-0 bg-black/20 z-0"></div>
                     <div className="absolute top-0 right-0 w-40 sm:w-64 h-40 sm:h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 z-0"></div>
                     <div className="absolute bottom-0 left-0 w-32 sm:w-48 h-32 sm:h-48 bg-white/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 z-0"></div>
-                    
+
                     {/* Close button - positioned absolutely */}
                     <button
-                        onClick={onClose}
+                        onClick={handleClose}
                         className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm border-2 border-white/30 text-white transition-all duration-300 hover:scale-110 hover:rotate-90 shadow-lg"
                         aria-label="Close"
                     >
                         <XMarkIcon className="w-4 h-4 sm:w-5 sm:h-5 stroke-2" />
                     </button>
-                    
+
                     {/* Content wrapper */}
                     <div className="relative z-10 pr-10 sm:pr-12">
                         <div className="flex items-center gap-2.5 sm:gap-3 md:gap-4">
@@ -129,10 +137,10 @@ export default function UniversitySelector({ isOpen, onClose, onSelect, universi
                                 >
                                     {/* Gradient overlay on hover */}
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                    
+
                                     {/* Animated corner accent */}
                                     <div className="absolute top-0 right-0 w-16 sm:w-20 h-16 sm:h-20 bg-gradient-to-br from-primary/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    
+
                                     {/* Check icon on hover */}
                                     <div className={`absolute top-3 right-3 sm:top-4 sm:right-4 transition-all duration-300 ${hoveredId === (uni.id || uni.name) ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
                                         <CheckCircleIcon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />

@@ -11,13 +11,16 @@ body {
 /* Disable touch highlighting for all elements */
 
 * {
-  -webkit-tap-highlight-color: transparent; /* For iOS Safari */
-  -webkit-touch-callout: none; /* Disable callout, iOS long-press menu */
+  -webkit-tap-highlight-color: transparent;
+  /* For iOS Safari */
+  -webkit-touch-callout: none;
+  /* Disable callout, iOS long-press menu */
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none; /* Disable text selection on all elements */
+  user-select: none;
+  /* Disable text selection on all elements */
 }
 
 /* Disable touch highlighting for all elements */
@@ -27,6 +30,7 @@ body {
 *::-webkit-scrollbar {
   width: 17px;
 }
+
 *::-webkit-scrollbar-track {
   background: hsl(var(--b1));
 }
@@ -50,6 +54,7 @@ body {
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
+
 .loader::after {
   content: "";
   box-sizing: border-box;
@@ -68,6 +73,7 @@ body {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -84,10 +90,12 @@ body {
   0% {
     background-color: hsl(var(--b3));
   }
+
   100% {
     background-color: hsl(var(--b2));
   }
 }
+
 /* skeleton */
 
 /* search button*/
@@ -99,10 +107,12 @@ body {
   0% {
     background-color: hsl(var(--p) / 0.7);
   }
+
   100% {
     background-color: hsl(var(--p));
   }
 }
+
 /* search button*/
 
 /*sweetAlert custom*/
@@ -133,12 +143,14 @@ body {
 .label_form {
   @apply text-base-content text-sm font-medium;
 }
+
 /* admin table button and input*/
 
 /*login page button*/
 .btn_loginFormSecondary {
   @apply flex items-center px-5 py-2 text-sm text-base-content transition-colors duration-200 bg-base-200 border border-base-300 rounded-lg gap-x-2 sm:w-auto;
 }
+
 .btn_loginFormPrimary {
   @apply btn bg-primary hover:bg-primary/90 min-w-[75%] text-primary-content font-medium rounded-lg text-sm px-5 py-2.5 text-center;
 }
@@ -150,6 +162,7 @@ body {
 .label_loinForm {
   @apply block mb-2 text-sm font-medium md:font-semibold text-base-content;
 }
+
 /*login page button*/
 
 .btn_sidebar {

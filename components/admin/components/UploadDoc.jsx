@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { formatFileSize } from "@edgestore/react/utils";
+import { formatFileSize } from "@/libs/utils";
 import {
   DocumentCheckIcon,
   DocumentTextIcon,

@@ -18,6 +18,8 @@ import AdminuploadIcon from "./AdminuploadIcon";
 import AdminPremiumIcon from "./AdminPremiumIcon";
 import SmallLoading from "./SmallLoading";
 import favourite from "./favourite.svg";
+import punya from "./punya.svg";
+import quicklinks from "./quicklinks.svg";
 
 export {
   addUser,
@@ -40,4 +42,6 @@ export {
   AdminPremiumIcon,
   SmallLoading,
   favourite,
+  punya,
+  quicklinks,
 };

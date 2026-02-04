@@ -36,6 +36,7 @@ export default function UniversitySwitcher({ selectedUniversity, onUniversityCha
                 onClose={() => setIsModalOpen(false)}
                 onSelect={onUniversityChange}
                 universities={universities}
+                selectedId={selectedUniversity?.id}
             />
         </>
     );

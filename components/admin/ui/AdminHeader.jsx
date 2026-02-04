@@ -1,10 +1,31 @@
 "use client";
 
-import { Menu, Bell, Search } from "lucide-react";
-// import ThemeToggle from "@/components/ui/ThemeToggle"; // Assuming you have one, or we can create/use existing
-// import { UserButton } from "@clerk/nextjs"; // Or your auth provider's user button
+import { Menu, Bell, Search, UserPlus, LogOut, User } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { signOut } from "next-auth/react";
 
-const AdminHeader = ({ setIsOpen }) => {
+const AdminHeader = ({ setIsOpen, setActiveView }) => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const handleLogout = async () => {
+        await signOut({ callbackUrl: "/login" });
+    };
+
     return (
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-base-300 bg-base-100/80 px-6 backdrop-blur-md">
             <div className="flex items-center gap-4">
@@ -34,11 +55,36 @@ const AdminHeader = ({ setIsOpen }) => {
                     <Bell size={20} />
                 </button>
 
-                {/* Theme Toggle - You might need to adjust this import based on your project */}
-                {/* <ThemeToggle /> */}
+                <div className="relative" ref={dropdownRef}>
+                    <button
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold hover:bg-primary/30 transition-colors cursor-pointer"
+                    >
+                        <UserPlus size={18} />
+                    </button>
 
-                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
-                    A
+                    {isDropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-base-100 rounded-lg shadow-lg border border-base-200 py-1 z-50 animate-in fade-in zoom-in-95 duration-200">
+                            <button
+                                onClick={() => {
+                                    setActiveView("profile");
+                                    setIsDropdownOpen(false);
+                                }}
+                                className="w-full text-left px-4 py-2 text-sm text-base-content hover:bg-base-200 flex items-center gap-2"
+                            >
+                                <User size={16} />
+                                Profile
+                            </button>
+                            <div className="h-px bg-base-200 my-1"></div>
+                            <button
+                                onClick={handleLogout}
+                                className="w-full text-left px-4 py-2 text-sm text-error hover:bg-error/10 flex items-center gap-2"
+                            >
+                                <LogOut size={16} />
+                                Logout
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </header>

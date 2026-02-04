@@ -133,6 +133,8 @@ const AdminUpload = () => {
             return;
         }
 
+        let hasErrors = false;
+
         try {
             await Promise.all(
                 fileStates.map(async (fileState) => {
@@ -171,12 +173,19 @@ const AdminUpload = () => {
                             throw new Error(response.data.message || 'Upload failed');
                         }
                     } catch (err) {
+                        hasErrors = true;
                         handleUploadError(err, fileState.file.name);
                         updateFileProgress(fileState.key, "ERROR");
                     }
                 })
             );
-            setActiveStep(activeStep + 1);
+
+            // Only proceed to next step if no errors occurred
+            if (!hasErrors) {
+                setActiveStep(activeStep + 1);
+            } else {
+                toast.error("Some files failed to upload. Please remove failed files or try again.");
+            }
         } catch (error) {
             console.error("An error occurred during file upload:", error);
             toast.error("An error occurred during file upload");

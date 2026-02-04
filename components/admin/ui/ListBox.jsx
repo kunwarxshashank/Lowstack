@@ -7,7 +7,7 @@ const ListBox = ({ value, onChange, data, style }) => {
     <Listbox value={value} onChange={onChange}>
       <div className="relative mt-1">
         <Listbox.Button className={`relative w-full cursor-pointer rounded-lg py-2 pl-3 pr-10 text-left shadow-md sm:text-sm ${style.bg}`}>
-          <span className="block truncate text-sm text-black font-medium">
+          <span className="block truncate text-sm text-white font-medium">
             {value}
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -29,8 +29,7 @@ const ListBox = ({ value, onChange, data, style }) => {
               <Listbox.Option
                 key={index}
                 className={({ active }) =>
-                  `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active ? "bg-green-400 text-white" : "text-gray-900"
+                  `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? "bg-green-400 text-white" : "text-gray-900"
                   }`
                 }
                 value={role}
@@ -38,9 +37,8 @@ const ListBox = ({ value, onChange, data, style }) => {
                 {({ selected }) => (
                   <>
                     <span
-                      className={`block truncate ${
-                        selected ? "font-medium" : "font-normal"
-                      }`}
+                      className={`block truncate ${selected ? "font-medium" : "font-normal"
+                        }`}
                     >
                       {role}
                     </span>

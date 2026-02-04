@@ -6,14 +6,23 @@ import { useEffect, useMemo, useState } from "react";
 import Table from "./components/Table";
 import { usePost } from "@/libs/hooks/usePost";
 
+import { useSession } from "next-auth/react";
+
 const AdminContentList = () => {
+    const { data: session } = useSession();
     const { data: fetchedPostData, error: postError, isLoading: PostLoading } = usePost();
     const [postData, setPostData] = useState([]);
 
     useEffect(() => {
-        if (fetchedPostData) setPostData(fetchedPostData.data);
+        if (fetchedPostData?.data) {
+            let data = fetchedPostData.data;
+            if (session?.user?.role !== 'ADMIN') {
+                data = data.filter(post => post.userId === session?.user?.id);
+            }
+            setPostData(data);
+        }
         if (postError) toast.error("Something went wrong in fetching Post data");
-    }, [fetchedPostData, postError]);
+    }, [fetchedPostData, postError, session]);
 
     const postDatas = useMemo(() => postData, [postData]);
 

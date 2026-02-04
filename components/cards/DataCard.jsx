@@ -13,31 +13,50 @@ const DataCard = ({
   const displayName = data.name === "Videos" ? "Quiz" : data.name;
 
   return (
-    <Link href={hrefData} className={`group ${style}`}>
-      <div className={`relative overflow-hidden rounded-xl bg-gradient-to-br from-base-100 to-base-200/50 backdrop-blur-md border border-base-content/10 p-3 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30 hover:-translate-y-1 ${styleContent}`}>
+    <Link href={hrefData} className={`group relative block ${style}`}>
+      {/* Main Card Container */}
+      <div className={`relative h-full overflow-hidden rounded-2xl bg-[#0e0e10]/80 border border-white/5 p-4 transition-all duration-300 group-hover:bg-[#15151b] group-hover:border-primary/20 group-hover:shadow-[0_0_30px_-5px_rgba(29,192,113,0.3)] group-hover:-translate-y-1 ${styleContent}`}>
 
-        {/* Gradient Glow Effect on Hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Animated Background Gradient Blob */}
+        <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-[50px] opacity-0 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-secondary/20 rounded-full blur-[50px] opacity-0 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none" />
 
-        {/* Animated corner accent */}
-        <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-primary/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="relative z-10 flex flex-col items-center justify-center text-center h-full gap-3">
 
-        <div className="relative z-10">
-          <figure className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-2.5 mb-2.5 mx-auto group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ring-1 ring-primary/10 shadow-sm">
-            <Image src={data.imgUrl} alt={altMsg} width={100} height={100} unoptimized className="object-contain w-full h-full drop-shadow-md" />
-          </figure>
+          {/* Icon Container with Glass Effect */}
+          <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-white/5 to-white/0 p-3 shadow-inner ring-1 ring-white/10 group-hover:ring-primary/40 group-hover:scale-110 transition-all duration-300">
+            <div className="absolute inset-0 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+            <Image
+              src={data.imgUrl}
+              alt={altMsg}
+              width={80}
+              height={80}
+              unoptimized
+              className="relative object-contain w-full h-full drop-shadow-sm group-hover:rotate-6 transition-transform duration-300"
+            />
+          </div>
 
-          <div className="text-center">
-            <h2
-              className={`text-sm md:text-base font-bold text-base-content tracking-tight group-hover:text-primary transition-colors line-clamp-2 leading-tight ${syleName}`}
-            >
-
-              {sem && <span className="ml-1 text-[12px] font-medium px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">{displayName + " " + sem}</span>}
+          {/* Text Content */}
+          <div className="w-full space-y-1">
+            <h2 className={`text-base md:text-lg font-bold text-gray-200 tracking-tight leading-snug group-hover:text-primary transition-colors line-clamp-2 ${syleName}`}>
+              {sem ? (
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-full">{sem}</span>
+                  {displayName}
+                </span>
+              ) : (
+                displayName
+              )}
             </h2>
+
             {data.description && (
-              <p className="text-[10px] md:text-xs text-base-content/50 mt-1 line-clamp-1 font-medium">{data.description}</p>
+              <div className="flex items-center justify-center gap-2 text-xs font-medium text-gray-500 group-hover:text-gray-400 transition-colors">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors"></span>
+                <p className="line-clamp-1">{data.description.split("•")[0]?.trim() || data.description}</p>
+              </div>
             )}
           </div>
+
         </div>
       </div>
     </Link>

@@ -15,8 +15,12 @@ import ShareDialogBox from "../models/ShareDialogBox";
 import PostViewDialogBox from "../models/PostViewDialogBox";
 import Link from "next/link";
 import { useContext } from "react";
+import { Home, Heart, Search as SearchIcon, User, Menu, X, Trophy, LogIn, Link as LinkIcon, Sun, Moon } from "lucide-react";
+
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
+  const { status } = useSession();
   const { data: fetchedData, error } = usePost();
   const setData = usePostStore((state) => state.setPosts);
 
@@ -115,8 +119,8 @@ const Navbar = () => {
 
   return (
     <nav className="flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6">
-      <p className=" text-primary align-middle text-center subpixel-antialiased text-3xl font-bold hidden sm:block">
-        LowStack.in
+      <p className="text-from-primary to-secondaryalign-middle text-center subpixel-antialiased text-3xl font-bold hidden sm:block">
+        LowStack
         {/* <span className="badge"></span> */}
       </p>
       <Search
@@ -129,80 +133,135 @@ const Navbar = () => {
       />
 
       <div className="md:flex hidden flex-row justify-end gap-4 items-center">
-
-        <Link href="/login">
-          <button className="btn_sidebar border-1 bg-primary border-base-content font-bold shadow-lg !text-white">
-            Login
-          </button>
-        </Link>
-
-
-
+        {status === "authenticated" ? (
+          <Link href="/dashboard">
+            <button className="btn_sidebar border-1 bg-gradient-to-r from-secondary to-primary border-base-content font-bold shadow-lg !text-white">
+              Dashboard
+            </button>
+          </Link>
+        ) : (
+          <Link href="/login">
+            <button className="btn_sidebar border-1 bg-gradient-to-r from-secondary to-primary border-base-content font-bold shadow-lg !text-white">
+              Login
+            </button>
+          </Link>
+        )}
       </div>
 
       {/* Small screen navigation */}
 
-      <div className="sm:hidden flex justify-between items-center relative">
+      <div className="sm:hidden flex justify-between items-center relative w-full pl-2 pr-0">
+        {/* Logo */}
         <div
-          className="w-[40px] h-[40px] rounded-[10px] bg-[#2c2f32] flex justify-center items-center cursor-pointer"
+          className="w-[40px] h-[40px] rounded-xl bg-gradient-to-br from-base-100 to-base-300 flex justify-center items-center cursor-pointer shadow-lg active:scale-95 transition-all duration-200 border border-white/5"
           onClick={() => router.push("/")}
         >
           <Image
             src={logo}
-            alt="user icon"
+            alt="logo"
             className="w-[60%] h-[60%] object-contain"
           />
         </div>
 
-        <p className="text-[#4acd8d] align-middle text-center subpixel-antialiased text-3xl font-bold">
-          Lowstack.in
+        {/* Brand Name */}
+        <p className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-bold text-2xl tracking-tight">
+          Lowstack
         </p>
 
+        {/* Hamburger Toggle */}
         <div
-          className={`w-[34px] h-[34px] object-contain cursor-pointer transition-transform transform ${toggleDrawer ? "rotate-45" : "rotate-0"
-            }`}
+          className={`w-[40px] h-[40px] rounded-xl flex justify-center items-center cursor-pointer transition-all duration-300 ${toggleDrawer ? "bg-primary text-white rotate-90" : "bg-base-200 text-base-content"}`}
           onClick={handleToggleDrawer}
           ref={menuButtonRef}
         >
-          <Image
-            src={toggleDrawer ? close : menu}
-            alt="menu icon"
-            className="w-full h-full"
-          />
+          {toggleDrawer ? <X size={24} /> : <Menu size={24} />}
         </div>
 
+        {/* Glassmorphic Drawer */}
         <div
-          className={`${toggleDrawer ? "translate-x-0" : "-translate-x-full"
-            } fixed top-0 bottom-0 left-0 rounded-r-[10px] bg-[#1c1c24] z-10  py-5 w-[250px] transition-transform duration-1000 `}
+          className={`fixed top-0 right-0 h-screen w-[280px] bg-[#13131a]/80 backdrop-blur-3xl border-l border-white/10 z-[100] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${toggleDrawer ? "translate-x-0 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]" : "translate-x-full"
+            }`}
           ref={sidebarRef}
         >
-          <ul className="mb-4 p-3">
-            {navlinks.map((data) => (
-              <li
-                key={data.name}
-                className={`flex p-4 ${isActive === data.name && "bg-[#3a3a43]"
-                  } hover:bg-[#2c2f32] rounded-full`}
-                onClick={() => {
-                  setIsActive(data.name);
-                  setToggleDrawer(false);
-                  data.btn ? setIsOpen(true) : router.push(data.link);
-                }}
-              >
-                <Image
-                  src={data.imgUrl}
-                  alt={data.name}
-                  className={`w-[24px] h-[24px] object-contain ${isActive === data.name ? "grayscale-0" : "grayscale"
+          {/* Drawer Header */}
+          <div className="flex justify-between items-center p-6 border-b border-white/5">
+            <h2 className="text-xl font-bold text-white">Menu</h2>
+            <div
+              onClick={() => setToggleDrawer(false)}
+              className="p-2 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
+            >
+              <X size={20} className="text-gray-400" />
+            </div>
+          </div>
+
+          {/* Drawer Links */}
+          <ul className="flex flex-col gap-3 p-4 mt-2">
+            {navlinks.map((data) => {
+              const active = isActive === data.name;
+
+              // Icon Selection Logic inline
+              let IconComponent = null;
+              switch (data.name) {
+                case "Home": IconComponent = <Home size={22} strokeWidth={active ? 2.5 : 2} />; break;
+                case "Hall of Punya": IconComponent = null; break; // Use image
+                case "Login": IconComponent = <LogIn size={22} strokeWidth={active ? 2.5 : 2} />; break;
+                case "Quick Links": IconComponent = <LinkIcon size={22} strokeWidth={active ? 2.5 : 2} />; break;
+                case "Favourites": IconComponent = <Heart size={22} strokeWidth={active ? 2.5 : 2} />; break;
+                default: IconComponent = null;
+              }
+
+              return (
+                <li
+                  key={data.name}
+                  className={`flex items-center p-4 rounded-2xl cursor-pointer transition-all duration-300 group ${active
+                      ? "bg-gradient-to-r from-primary/20 to-transparent border-l-4 border-primary text-primary"
+                      : "hover:bg-white/5 text-gray-400 border-l-4 border-transparent hover:text-white"
                     }`}
-                />
-                <p
-                  className={`ml-[20px] font-epilogue font-semibold text-[14px] ${isActive === data.name ? "text-[#1dc071]" : "text-[#808191]"
-                    }`}
+                  onClick={() => {
+                    setIsActive(data.name);
+                    setToggleDrawer(false);
+                    data.btn ? setIsOpen(true) : router.push(data.link);
+                  }}
                 >
-                  {data.name}
-                </p>
-              </li>
-            ))}
+                  <div className={`mr-4 transition-transform duration-300 ${active ? "scale-110 drop-shadow-[0_0_8px_rgba(29,192,113,0.5)]" : "group-hover:scale-110"}`}>
+                    {IconComponent ? (
+                      IconComponent
+                    ) : (
+                      <div className={`w-[22px] h-[22px] relative ${active ? "grayscale-0" : "grayscale"} transition-all duration-300`}>
+                        <Image
+                          src={data.imgUrl}
+                          alt={data.name}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <p className={`font-medium text-[15px] ${active ? "font-bold" : "font-normal"}`}>
+                    {data.name}
+                  </p>
+
+                  {/* Arrow for active */}
+                  {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_5px_#1dc071]"></div>}
+                </li>
+              );
+            })}
           </ul>
+
+          {/* User Section at Bottom */}
+          {status === "authenticated" && (
+            <div className="absolute bottom-24 left-4 right-4 p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold">
+                  <User size={20} />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-white">My Account</p>
+                  <Link href="/dashboard" className="text-xs text-primary hover:underline">View Dashboard</Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -215,6 +274,71 @@ const Navbar = () => {
           data={post}
         />
       )}
+
+      {/* Glassmorphic Sticky Bottom Navigation for Mobile */}
+      <div className="fixed bottom-0 left-0 right-0 min-h-[70px] bg-black/30 backdrop-blur-xl border-t border-white/10 sm:hidden flex justify-around items-center z-50 px-4 pb-3 pt-2 shadow-[0_-10px_30px_rgba(0,0,0,0.5)] safe-area-pb transition-all duration-300">
+        <div
+          onClick={() => {
+            setIsActive("Home");
+            router.push("/");
+          }}
+          className={`group flex flex-col items-center justify-center p-2 rounded-2xl cursor-pointer transition-all duration-300 w-[60px] hover:bg-white/5 ${isActive === "Home" ? "text-primary scale-110" : "text-gray-400"}`}
+        >
+          <Home size={22} strokeWidth={isActive === "Home" ? 2.5 : 2} className={`transition-all duration-300 ${isActive === "Home" ? "drop-shadow-[0_0_8px_rgba(29,192,113,0.5)]" : ""}`} />
+
+        </div>
+
+        <div
+          onClick={() => {
+            setIsActive("Favourites");
+            router.push("/favourites");
+          }}
+          className={`group flex flex-col items-center justify-center p-2 rounded-2xl cursor-pointer transition-all duration-300 w-[60px] hover:bg-white/5 ${isActive === "Favourites" ? "text-primary scale-110" : "text-gray-400"}`}
+        >
+          <Heart size={22} strokeWidth={isActive === "Favourites" ? 2.5 : 2} className={`transition-all duration-300 ${isActive === "Favourites" ? "fill-primary/20 drop-shadow-[0_0_8px_rgba(29,192,113,0.5)]" : ""}`} />
+        </div>
+
+        <div
+          onClick={() => {
+            setIsActive("Search");
+            document.getElementById('global-search-input')?.focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className={`flex flex-col items-center justify-center -mt-6 p-3 rounded-full bg-gradient-to-tr from-primary to-secondary shadow-[0_0_15px_rgba(29,192,113,0.4)] cursor-pointer transition-all duration-300 w-[56px] h-[56px] border-4 border-[#121212] z-10 active:scale-95 hover:shadow-[0_0_20px_rgba(29,192,113,0.6)]`}
+        >
+          <SearchIcon size={24} color="white" strokeWidth={2.5} />
+        </div>
+
+        <div
+          onClick={() => {
+            setIsActive("Hall of Punya");
+            router.push("/hallofpunya");
+          }}
+          className={`group flex flex-col items-center justify-center p-2 rounded-2xl cursor-pointer transition-all duration-300 w-[60px] hover:bg-white/5 ${isActive === "Hall of Punya" ? "text-primary scale-110" : "text-gray-400"}`}
+        >
+          <div className={`w-6 h-6 flex items-center justify-center transition-all duration-300 ${isActive === "Hall of Punya" ? "drop-shadow-[0_0_8px_rgba(29,192,113,0.5)] grayscale-0" : "grayscale"}`}>
+            {navlinks.find(n => n.name === "Hall of Punya")?.imgUrl && (
+              <Image
+                src={navlinks.find(n => n.name === "Hall of Punya")?.imgUrl}
+                alt="Hall of Punya"
+                className="w-full h-full object-contain"
+              />
+            )}
+          </div>
+        </div>
+
+        <div
+          onClick={() => {
+            setIsActive("Account");
+            router.push(status === "authenticated" ? "/dashboard" : "/login");
+          }}
+          className={`group flex flex-col items-center justify-center p-2 rounded-2xl cursor-pointer transition-all duration-300 w-[60px] hover:bg-white/5 ${isActive === "Account" ? "text-primary scale-110" : "text-gray-400"}`}
+        >
+          <User size={22} strokeWidth={isActive === "Account" ? 2.5 : 2} className={`transition-all duration-300 ${isActive === "Account" ? "drop-shadow-[0_0_8px_rgba(29,192,113,0.5)]" : ""}`} />
+        </div>
+
+
+      </div>
     </nav>
   );
 };

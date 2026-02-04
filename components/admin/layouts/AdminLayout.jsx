@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import AdminSidebar from "../ui/AdminSidebar";
 import AdminHeader from "../ui/AdminHeader";
 import AdminUsersList from "../AdminUsersList";
@@ -13,8 +14,19 @@ import AdminProfile from "../AdminProfile";
 import AdminReportsList from "../AdminReportsList";
 
 const AdminLayout = ({ children }) => {
+    const { data: session } = useSession();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [activeView, setActiveView] = useState("dashboard");
+
+    useEffect(() => {
+        if (session?.user?.role !== "ADMIN" && session?.user?.role === "USER") {
+            // List of allowed views for USER
+            const allowedViews = ["content", "upload", "profile"];
+            if (!allowedViews.includes(activeView)) {
+                setActiveView("content");
+            }
+        }
+    }, [session, activeView]);
 
     const renderContent = () => {
         switch (activeView) {
@@ -48,7 +60,7 @@ const AdminLayout = ({ children }) => {
             />
 
             <div className="lg:pl-64 flex flex-col min-h-screen">
-                <AdminHeader setIsOpen={setIsSidebarOpen} />
+                <AdminHeader setIsOpen={setIsSidebarOpen} setActiveView={setActiveView} />
 
                 <main className="flex-1 p-6 overflow-y-auto">
                     <div className="mx-auto max-w-7xl">
