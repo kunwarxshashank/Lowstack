@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import UniversitySwitcher from "../UniversitySwitcher";
 
@@ -12,15 +13,19 @@ const slides = [
         subtitle: " Access Notes, PYQ's, and Study Materials tailored for your university curriculum.",
         gradient: "from-primary/10 via-transparent to-secondary/10",
         pattern: "bg-grid-white/[0.02]",
-        color: "text-primary"
+        color: "text-primary",
+        buttonText: "Start Learning",
+        href: "/category-select"
     },
     {
         id: 2,
-        title: "Ace Your Semester Exams",
-        subtitle: "Get organized previous year questions and solved papers to boost your preparation.",
+        title: "Join Whatsapp Community",
+        subtitle: "To get latest updates and notifications.",
         gradient: "from-blue-500/10 via-transparent to-purple-500/10",
         pattern: "bg-dot-white/[0.2]",
-        color: "text-blue-500"
+        color: "text-blue-500",
+        buttonText: "Join Community",
+        href: "https://chat.whatsapp.com/HPLZTPSGHBnAw6IWgV5K2E"
     },
     {
         id: 3,
@@ -28,7 +33,9 @@ const slides = [
         subtitle: "Join thousands of students sharing resources and helping each other succeed.",
         gradient: "from-orange-500/10 via-transparent to-red-500/10",
         pattern: "bg-grid-white/[0.02]",
-        color: "text-orange-500"
+        color: "text-orange-500",
+        buttonText: "Join Community",
+        href: "/contact"
     }
 ];
 
@@ -102,12 +109,12 @@ const HeroSlider = ({ session, selectedUniversity, updateUniversity, allUniversi
                             </p>
 
                             <div className="pt-2 md:pt-4 flex gap-3 md:gap-4 justify-center md:justify-start">
-                                <button className="btn btn-primary btn-sm md:btn-md rounded-full px-6 shadow-lg hover:shadow-primary/40 transition-all hover:scale-105 border-none bg-gradient-to-r from-primary to-secondary text-white font-bold text-xs md:text-base">
-                                    Get Started
-                                </button>
-                                <button className="btn btn-ghost btn-sm md:btn-md rounded-full px-6 hover:bg-base-content/10 text-xs md:text-base">
+                                <Link href={slide.href ? slide.href : "/category-select"} className="btn btn-primary btn-sm md:btn-md rounded-full px-6 shadow-lg hover:shadow-primary/40 transition-all hover:scale-105 border-none bg-gradient-to-r from-primary to-secondary text-white font-bold text-xs md:text-base">
+                                    {slide.buttonText}
+                                </Link>
+                                {/* <button className="btn btn-ghost btn-sm md:btn-md rounded-full px-6 hover:bg-base-content/10 text-xs md:text-base">
                                     Learn More
-                                </button>
+                                </button> */}
                             </div>
                         </div>
 
@@ -152,21 +159,6 @@ const HeroSlider = ({ session, selectedUniversity, updateUniversity, allUniversi
                     />
                 ))}
             </div>
-
-            {/* Arrow Navigation */}
-            <button
-                onClick={prevSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-base-100/10 backdrop-blur-md border border-white/5 hover:bg-base-100/20 text-base-content/50 hover:text-primary transition-all duration-300 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 hidden md:block"
-            >
-                <ChevronLeft size={20} />
-            </button>
-
-            <button
-                onClick={nextSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-base-100/10 backdrop-blur-md border border-white/5 hover:bg-base-100/20 text-base-content/50 hover:text-primary transition-all duration-300 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 hidden md:block"
-            >
-                <ChevronRight size={20} />
-            </button>
 
         </div>
     );

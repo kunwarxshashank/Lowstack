@@ -1,7 +1,6 @@
 import {
   Aboutus,
   Contribution,
-  Footer,
   Hero,
   Howitworks,
   Team,
@@ -15,7 +14,6 @@ const About = () => {
         {/* <Aboutus /> */}
         <Contribution />
         <Team />
-        <Footer />
       </div>
     </div>
   );

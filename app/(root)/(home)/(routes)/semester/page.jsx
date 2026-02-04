@@ -34,7 +34,7 @@ const UserSemester = () => {
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute -top-16 -right-16 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-        
+
         {/* Content */}
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="p-2.5 bg-white/20 backdrop-blur-sm rounded-xl">

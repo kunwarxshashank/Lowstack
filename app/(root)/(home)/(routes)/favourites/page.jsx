@@ -1,19 +1,25 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "sonner";
 import PostCard from "@/components/cards/PostCard";
-import NoDataFound from "@/components/ui/NoDataFound";
 import SkeletonLoading from "@/components/ui/SkeletonLoading";
-import { HeartIcon, SparklesIcon, BookmarkIcon } from "@heroicons/react/24/outline";
+import { HeartIcon, SparklesIcon, BookmarkIcon, UserIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 const FavouritesPage = () => {
+    const { data: session, status } = useSession();
     const [favourites, setFavourites] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        fetchFavourites();
-    }, []);
+        if (status === "authenticated") {
+            fetchFavourites();
+        } else if (status === "unauthenticated") {
+            setIsLoading(false);
+        }
+    }, [status]);
 
     const fetchFavourites = async () => {
         try {
@@ -59,13 +65,29 @@ const FavouritesPage = () => {
             </div>
 
             <div className="items-center">
-                {isLoading ? (
+                {status === "loading" || isLoading ? (
                     <SkeletonLoading />
+                ) : status === "unauthenticated" ? (
+                    <div className="flex flex-col items-center justify-center py-20 bg-base-200/50 rounded-3xl border border-dashed border-base-content/20 text-center px-4">
+                        <div className="p-4 rounded-full bg-primary/10 text-primary mb-4">
+                            <UserIcon className="w-12 h-12" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-base-content mb-2">Login Required</h2>
+                        <p className="text-base-content/60 max-w-sm mb-8">
+                            Please login to your account to view and manage your favourite saved materials.
+                        </p>
+                        <Link
+                            href="/login"
+                            className="btn btn-primary rounded-full px-10 shadow-lg shadow-primary/20 transition-all hover:scale-105"
+                        >
+                            Login Now
+                        </Link>
+                    </div>
                 ) : (
                     <>
                         {favourites.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-20 bg-base-200/50 rounded-3xl border border-dashed border-base-content/20">
-                                <HeartIcon color="#989898" className="w-16 h-16 text-base-content/20 mb-4" />
+                                <HeartIcon className="w-16 h-16 text-base-content/20 mb-4" />
                                 <h2 className="text-xl font-bold text-base-content/50">No favourites yet</h2>
                                 <p className="text-base-content/40 mt-2">Start adding notes to your favourites to see them here!</p>
                             </div>
