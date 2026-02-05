@@ -28,6 +28,9 @@ export const authOptions = {
 
                     if (user) {
                         // check password
+                        if (!user.password) {
+                            throw new Error("Please login with Google!");
+                        }
                         const passwordMatch = await bcrypt.compare(password, user.password);
 
                         if (passwordMatch) {
@@ -65,21 +68,29 @@ export const authOptions = {
         },
 
         async session({ session, token }) {
-            const dbUser = await prisma.user.findUnique({
-                where: { id: token.id },
-            });
+            const userId = token.id || token.sub;
 
-            if (dbUser) {
-                session.user = {
-                    ...session.user,
-                    id: dbUser.id,
-                    name: dbUser.name,
-                    email: dbUser.email,
-                    role: dbUser.userRole,
-                    selectedUniversity: dbUser.selectedUniversity || null,
-                    subscription: dbUser.subscription || null,
-                    avatar: dbUser.avatar || null,
-                };
+            if (userId) {
+                try {
+                    const dbUser = await prisma.user.findUnique({
+                        where: { id: userId },
+                    });
+
+                    if (dbUser) {
+                        session.user = {
+                            ...session.user,
+                            id: dbUser.id,
+                            name: dbUser.name,
+                            email: dbUser.email,
+                            role: dbUser.userRole,
+                            selectedUniversity: dbUser.university || null,
+                            subscription: dbUser.subscription || null,
+                            avatar: dbUser.avatar || null,
+                        };
+                    }
+                } catch (error) {
+                    console.error("Error fetching user in session callback:", error);
+                }
             }
 
             return session;

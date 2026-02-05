@@ -31,13 +31,13 @@ export async function POST(req) {
         // Update user's selected university
         const user = await prisma.user.update({
             where: { email: session.user.email },
-            data: { selectedUniversity: universityId },
+            data: { university: universityId },
         });
 
         return NextResponse.json(
             {
                 message: "University updated successfully",
-                selectedUniversity: user.selectedUniversity,
+                selectedUniversity: user.university,
             },
             { status: 200 }
         );

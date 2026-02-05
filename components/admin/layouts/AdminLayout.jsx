@@ -12,11 +12,33 @@ import BranchConfig from "../components/BranchConfig";
 import AdminUser from "../AdminUser";
 import AdminProfile from "../AdminProfile";
 import AdminReportsList from "../AdminReportsList";
+import UniversitySelector from "@/components/UniversitySelector";
+import { useUniversity } from "@/libs/hooks/useUniversity";
 
 const AdminLayout = ({ children }) => {
     const { data: session } = useSession();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [activeView, setActiveView] = useState("dashboard");
+    const {
+        selectedUniversity,
+        updateUniversity,
+        isLoading: isUniversityLoading,
+        allUniversities
+    } = useUniversity();
+
+    const [showFTUE, setShowFTUE] = useState(false);
+
+    // Show FTUE modal if no university is selected
+    useEffect(() => {
+        if (!isUniversityLoading && !selectedUniversity) {
+            setShowFTUE(true);
+        }
+    }, [isUniversityLoading, selectedUniversity]);
+
+    const handleUniversitySelect = (university) => {
+        updateUniversity(university);
+        setShowFTUE(false);
+    };
 
     useEffect(() => {
         if (session?.user?.role !== "ADMIN" && session?.user?.role === "USER") {
@@ -68,7 +90,17 @@ const AdminLayout = ({ children }) => {
                     </div>
                 </main>
             </div>
-        </div>
+
+
+            {/* FTUE Modal */}
+            <UniversitySelector
+                isOpen={showFTUE}
+                onClose={() => { }} // Prevent closing without selection
+                onSelect={handleUniversitySelect}
+                universities={allUniversities}
+                selectedId={selectedUniversity?.id}
+            />
+        </div >
     );
 };
 

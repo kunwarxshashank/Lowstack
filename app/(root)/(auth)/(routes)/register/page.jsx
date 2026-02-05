@@ -11,7 +11,7 @@ import { logo } from "@/public/assets";
 import FormButtons from "@/components/ui/FormButtons";
 import FormField from "@/components/ui/FormField";
 import { UserValidation } from "@/libs/validations/user";
-import universities from "@/constants/university.json";
+
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -28,12 +28,10 @@ const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [university, setUniversity] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-  // Filter universities that have an ID
-  const availableUniversities = universities.filter((uni) => uni.id);
+
 
   const handleGoogleLogin = async () => {
     setIsGoogleLoading(true);
@@ -55,7 +53,6 @@ const RegisterPage = () => {
       email,
       name,
       password,
-      university,
     };
 
     try {
@@ -75,14 +72,24 @@ const RegisterPage = () => {
           name,
           email,
           password,
-          university,
         });
         if (response.statusText === "FAILED") {
           toast.error(response.data);
         } else {
           toast.success("Successfully created");
-          handleReset();
-          router.push("/login");
+
+          // Auto-login after registration
+          const res = await signIn("credentials", {
+            redirect: false,
+            email,
+            password,
+          });
+
+          if (res?.ok) {
+            router.push("/dashboard");
+          } else {
+            router.push("/login");
+          }
         }
       }
     } catch (err) {
@@ -98,7 +105,6 @@ const RegisterPage = () => {
     setPassword("");
     setName("");
     setEmail("");
-    setUniversity("");
   };
 
   return (
@@ -192,23 +198,7 @@ const RegisterPage = () => {
                 classInput="input input-bordered w-full bg-base-50/50 focus:bg-base-100 focus:border-primary/50 transition-all duration-300 input-md"
               />
 
-              <div className="form-control w-full">
-                <label className="label pt-0 pb-1.5 ml-1">
-                  <span className="label-text text-sm font-medium text-base-content/80">University</span>
-                </label>
-                <select
-                  name="university"
-                  value={university}
-                  onChange={(e) => setUniversity(e.target.value)}
-                  className="select select-bordered w-full bg-base-50/50 focus:bg-base-100 focus:border-primary/50 transition-all duration-300 select-md font-normal"
-                  required
-                >
-                  <option value="" disabled>Select your university</option>
-                  {availableUniversities.map((uni) => (
-                    <option key={uni.id} value={uni.id}>{uni.name}</option>
-                  ))}
-                </select>
-              </div>
+
 
               <button
                 type="submit"

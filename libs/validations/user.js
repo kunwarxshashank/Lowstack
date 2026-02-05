@@ -42,7 +42,6 @@ export const UserValidation = {
   registration: User.required({
     email: true,
     name: true,
-    university: true,
   }),
   profileUpdate: UserProfileUpdate.required({
     email: true,
