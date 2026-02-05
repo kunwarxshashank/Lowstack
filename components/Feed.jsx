@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import DataCard from "./cards/DataCard";
 import { useBranchConfigs } from "@/libs/hooks/useBranchConfig";
 import SkeletonLoading from "./ui/SkeletonLoading";
+import { books } from "@/public/icons";
 
 const Feed = ({ label, styleHead, style, university }) => {
   const { data: branches, isLoading, error } = useBranchConfigs();
@@ -37,7 +38,7 @@ const Feed = ({ label, styleHead, style, university }) => {
           <p className="text-error font-medium">Failed to load branches</p>
         </div>
       ) : filteredBranches && filteredBranches.length > 0 ? (
-        <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4 ${style}`}>
+        <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-3 md:gap-4 ${style}`}>
           {filteredBranches.map((item, index) => {
             return (
               <DataCard
@@ -50,7 +51,7 @@ const Feed = ({ label, styleHead, style, university }) => {
                   id: item.id,
                   name: item.branch_name,
                   link: item.branch_code,
-                  imgUrl: item.logo || "https://freepngimg.com/thumb/book/6-books-png-image-with-transparency-background.png",
+                  imgUrl: item.logo || books,
                   description: `${item.semester_count} Semesters • ${item.branch_code}`
                 }}
                 altMsg={`${item.branch_name} - ${item.semester_count} Semesters`}

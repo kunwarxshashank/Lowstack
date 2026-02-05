@@ -266,7 +266,7 @@ const DocDetails = ({
                     htmlFor={`description-${index}`}
                     className="label_form capitalize mb-1 block"
                   >
-                    description
+                    description <span className="text-base-content/60 text-sm normal-case">(optional)</span>
                   </label>
                   <textarea
                     id={`description-${index}`}

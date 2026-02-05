@@ -18,9 +18,11 @@ import { useContext } from "react";
 import { Home, Heart, Search as SearchIcon, User, Menu, X, Trophy, LogIn, Link as LinkIcon, Sun, Moon } from "lucide-react";
 
 import { useSession } from "next-auth/react";
+import { ThemeContext } from "@/components/layouts/ProviderLayouts";
 
 const Navbar = () => {
   const { status } = useSession();
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const { data: fetchedData, error } = usePost();
   const setData = usePostStore((state) => state.setPosts);
 
@@ -214,8 +216,8 @@ const Navbar = () => {
                 <li
                   key={data.name}
                   className={`flex items-center p-4 rounded-2xl cursor-pointer transition-all duration-300 group ${active
-                      ? "bg-gradient-to-r from-primary/20 to-transparent border-l-4 border-primary text-primary"
-                      : "hover:bg-white/5 text-gray-400 border-l-4 border-transparent hover:text-white"
+                    ? "bg-gradient-to-r from-primary/20 to-transparent border-l-4 border-primary text-primary"
+                    : "hover:bg-white/5 text-gray-400 border-l-4 border-transparent hover:text-white"
                     }`}
                   onClick={() => {
                     setIsActive(data.name);
@@ -247,6 +249,29 @@ const Navbar = () => {
               );
             })}
           </ul>
+
+          {/* Theme Toggle Button */}
+          <div className="px-4 mt-2">
+            <button
+              onClick={toggleTheme}
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  {theme === "dark" ? (
+                    <Sun size={20} className="text-primary group-hover:rotate-180 transition-transform duration-500" />
+                  ) : (
+                    <Moon size={20} className="text-primary group-hover:-rotate-12 transition-transform duration-300" />
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-white">Theme</p>
+                  <p className="text-xs text-gray-400 capitalize">{theme === "dark" ? "Dark Mode" : "Light Mode"}</p>
+                </div>
+              </div>
+              <div className="w-2 h-2 rounded-full bg-primary/50 group-hover:bg-primary transition-colors"></div>
+            </button>
+          </div>
 
           {/* User Section at Bottom */}
           {status === "authenticated" && (

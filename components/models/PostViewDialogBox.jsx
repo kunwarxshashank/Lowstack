@@ -449,8 +449,8 @@ const PostViewDialogBox = ({ isOpen, setIsOpen, data }) => {
                         onClick={handleToggleFavourite}
                         disabled={isTogglingFavourite}
                         className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-bold transition-all duration-300 active:scale-95 sm:hover:scale-105 hover:shadow-lg ${isFavourite
-                            ? "bg-rose-100 text-rose-500 hover:bg-rose-200 hover:shadow-rose-200/30"
-                            : "bg-base-content/5 text-base-content/70 hover:bg-rose-50 hover:text-rose-500 hover:shadow-rose-100/30"
+                          ? "bg-rose-100 text-rose-500 hover:bg-rose-200 hover:shadow-rose-200/30"
+                          : "bg-base-content/5 text-base-content/70 hover:bg-rose-50 hover:text-rose-500 hover:shadow-rose-100/30"
                           }`}
                         title={isFavourite ? "Remove from favourites" : "Add to favourites"}
                       >
@@ -654,3 +654,4 @@ const PostViewDialogBox = ({ isOpen, setIsOpen, data }) => {
 };
 
 export default PostViewDialogBox;
+

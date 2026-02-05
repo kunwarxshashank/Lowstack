@@ -29,28 +29,28 @@ const UserSemester = () => {
   return (
     <div className="min-h-screen pb-8">
       {/* Modern Header with Gradient */}
-      <div className="relative mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent p-6 sm:p-8 shadow-2xl">
+      <div className="relative mb-6 md:mb-8 overflow-hidden rounded-2xl md:rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent p-4 md:p-6 lg:p-8 shadow-2xl">
         {/* Decorative Background Elements */}
         <div className="absolute inset-0 bg-black/20"></div>
-        <div className="absolute -top-16 -right-16 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+        <div className="absolute -top-12 -right-12 md:-top-16 md:-right-16 w-40 h-40 md:w-48 md:h-48 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-8 -left-8 w-32 h-32 md:w-40 md:h-40 bg-white/10 rounded-full blur-2xl"></div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="p-2.5 bg-white/20 backdrop-blur-sm rounded-xl">
-            <CalendarDaysIcon className="w-7 h-7 sm:w-9 sm:h-9 text-white" />
+        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
+          <div className="p-2 md:p-2.5 bg-white/20 backdrop-blur-sm rounded-xl">
+            <CalendarDaysIcon className="w-6 h-6 md:w-7 md:h-7 lg:w-9 lg:h-9 text-white" />
           </div>
           <div className="flex-1">
-            <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight mb-2">
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-black text-white leading-tight mb-1.5 md:mb-2">
               Select Your Semester
             </h1>
-            <div className="flex flex-wrap items-center gap-2 text-white/90 text-xs sm:text-sm">
-              <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                <AcademicCapIcon className="w-3.5 h-3.5" />
+            <div className="flex flex-wrap items-center gap-1.5 md:gap-2 text-white/90 text-xs md:text-sm">
+              <div className="flex items-center gap-1 md:gap-1.5 bg-white/10 backdrop-blur-sm px-2 md:px-3 py-1 md:py-1.5 rounded-full">
+                <AcademicCapIcon className="w-3 h-3 md:w-3.5 md:h-3.5" />
                 <span className="font-medium uppercase">{university || "University"}</span>
               </div>
-              <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                <SparklesIcon className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-1 md:gap-1.5 bg-white/10 backdrop-blur-sm px-2 md:px-3 py-1 md:py-1.5 rounded-full">
+                <SparklesIcon className="w-3 h-3 md:w-3.5 md:h-3.5" />
                 <span className="font-medium uppercase">{branch || "Branch"}</span>
               </div>
             </div>

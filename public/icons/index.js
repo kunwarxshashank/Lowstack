@@ -16,24 +16,26 @@ import subject from "./subject.PNG";
 import cse from "./cse.png"
 import aiml from "./aiml.png"
 import aids from "./aids.png"
+import books from "./books.png"
 
-export { 
-    important, 
-    doc, 
-    syllabus, 
-    study, 
-    qp, 
-    one, 
-    two, 
-    three, 
-    four, 
-    five, 
-    six ,
+export {
+    important,
+    doc,
+    syllabus,
+    study,
+    qp,
+    one,
+    two,
+    three,
+    four,
+    five,
+    six,
     seven,
     eight,
     coop,
     subject,
     cse,
     aiml,
-    aids
+    aids,
+    books
 };

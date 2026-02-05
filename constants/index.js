@@ -14,7 +14,8 @@ import {
   eight,
   aids,
   aiml,
-  cse
+  cse,
+  books
 } from "@/public/icons";
 
 export const navlinks = [

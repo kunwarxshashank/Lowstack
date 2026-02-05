@@ -9,6 +9,7 @@ import { useMemo } from "react";
 
 const CategorySelect = () => {
     const searchParams = useSearchParams();
+    const university = searchParams.get("university");
     const branch = searchParams.get("branch");
     const semester = searchParams.get("semester");
     const subjectCode = searchParams.get("subjectCode");
@@ -47,6 +48,7 @@ const CategorySelect = () => {
                                 hrefData={{
                                     pathname: `/view-doc`,
                                     query: {
+                                        university: university,
                                         branch: branch,
                                         semester: semester,
                                         subjectCode: subjectCode,

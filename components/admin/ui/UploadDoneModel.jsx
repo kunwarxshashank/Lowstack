@@ -4,10 +4,13 @@ import { useRouter } from "next/navigation";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Dialog, Transition } from "@headlessui/react";
 
-const UploadDoneModel = ({ isOpen, setIsOpen }) => {
+const UploadDoneModel = ({ isOpen, setIsOpen, onClose }) => {
   const router = useRouter();
   const closeModal = () => {
     setIsOpen(false);
+    if (onClose) {
+      onClose();
+    }
     // router.push("/dashboard"); // Removed redirect for admin dashboard flow
   };
 

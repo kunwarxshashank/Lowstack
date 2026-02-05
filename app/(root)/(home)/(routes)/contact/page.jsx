@@ -26,21 +26,21 @@ const Contact = () => {
             <h3 className="text-2xl font-bold text-base-content mb-2">Email Us</h3>
             <p className="text-base-content/60 mb-6">For general inquiries and support</p>
             <div className="px-6 py-3 rounded-full bg-base-100 border border-base-content/10 text-base-content font-semibold group-hover:border-primary/50 transition-colors">
-              screation190@gmail.com
+              ahighrisk@gmail.com
             </div>
           </div>
         </a>
 
         {/* Phone Card */}
-        <a href="tel:+917999649285" className="group block">
+        <a href="https://chat.whatsapp.com/HPLZTPSGHBnAw6IWgV5K2E" className="group block">
           <div className="h-full bg-base-200/50 backdrop-blur-md border border-base-content/5 rounded-3xl p-8 hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 hover:-translate-y-1 text-center flex flex-col items-center justify-center">
             <div className="p-4 rounded-full bg-secondary/10 text-secondary mb-6 group-hover:scale-110 transition-transform duration-300">
               <Phone size={32} />
             </div>
             <h3 className="text-2xl font-bold text-base-content mb-2">Call Us</h3>
-            <p className="text-base-content/60 mb-6">Mon-Fri from 9am to 6pm</p>
+            <p className="text-base-content/60 mb-6">Why Call Us?</p>
             <div className="px-6 py-3 rounded-full bg-base-100 border border-base-content/10 text-base-content font-semibold group-hover:border-secondary/50 transition-colors">
-              +91 79996 49285
+              Lol, we don't have a phone number
             </div>
           </div>
         </a>
@@ -56,7 +56,7 @@ const Contact = () => {
         <p className="text-base-content/70">
           Join our WhatsApp group for instant updates and community support.
         </p>
-        <a href="#" className="mt-6  btn btn-primary rounded-full px-8">Join Community</a>
+        <a href="https://chat.whatsapp.com/HPLZTPSGHBnAw6IWgV5K2E" className="mt-6  btn btn-primary rounded-full px-8">Join Community</a>
       </div>
 
     </div>

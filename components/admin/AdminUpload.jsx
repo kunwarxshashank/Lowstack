@@ -78,10 +78,25 @@ const AdminUpload = () => {
         const updatedFile = [...fileStates];
         updatedFile.splice(fileIndex, 1);
         setFileStates(updatedFile);
+        // Also remove from uploadRes if it exists
+        const updatedUploadRes = [...uploadRes];
+        if (updatedUploadRes[fileIndex]) {
+            updatedUploadRes.splice(fileIndex, 1);
+            setUploadRes(updatedUploadRes);
+        }
     };
 
     const handlePreviousBtn = () => {
         setActiveStep(activeStep - 1);
+    };
+
+    const resetUploadState = () => {
+        setFiles([]);
+        setFileStates([]);
+        setUploadRes([]);
+        setFileDetails([]);
+        setActiveStep(0);
+        setSubmitModalOpen(false);
     };
 
     const handleUploadError = (error, fileName) => {
@@ -134,51 +149,58 @@ const AdminUpload = () => {
         }
 
         let hasErrors = false;
+        const uploadResults = [];
 
         try {
-            await Promise.all(
-                fileStates.map(async (fileState) => {
-                    try {
-                        if (fileState.progress !== "PENDING") return;
+            // Upload files sequentially to maintain order
+            for (let i = 0; i < fileStates.length; i++) {
+                const fileState = fileStates[i];
 
-                        const formData = new FormData();
-                        formData.append('file', fileState.file);
-                        formData.append('userId', session?.user?.id || session?.user?.email);
-                        formData.append('uploadType', 'document');
-
-                        const response = await axios.post('/api/upload', formData, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                            },
-                            onUploadProgress: (progressEvent) => {
-                                const progress = Math.round(
-                                    (progressEvent.loaded * 100) / progressEvent.total
-                                );
-                                updateFileProgress(fileState.key, progress);
-                            },
-                        });
-
-                        if (response.data.success) {
-                            updateFileProgress(fileState.key, "COMPLETE");
-                            setUploadRes((uploadRes) => [
-                                ...uploadRes,
-                                {
-                                    url: response.data.fileUrl,
-                                    filename: fileState.file.name,
-                                    path: response.data.filePath,
-                                    id: response.data.fileId,
-                                },
-                            ]);
-                        } else {
-                            throw new Error(response.data.message || 'Upload failed');
-                        }
-                    } catch (err) {
-                        hasErrors = true;
-                        handleUploadError(err, fileState.file.name);
-                        updateFileProgress(fileState.key, "ERROR");
+                try {
+                    if (fileState.progress !== "PENDING") {
+                        // If file was already uploaded, skip it but maintain the order
+                        uploadResults.push(null);
+                        continue;
                     }
-                })
-            );
+
+                    const formData = new FormData();
+                    formData.append('file', fileState.file);
+                    formData.append('userId', session?.user?.id || session?.user?.email);
+                    formData.append('uploadType', 'document');
+
+                    const response = await axios.post('/api/upload', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        onUploadProgress: (progressEvent) => {
+                            const progress = Math.round(
+                                (progressEvent.loaded * 100) / progressEvent.total
+                            );
+                            updateFileProgress(fileState.key, progress);
+                        },
+                    });
+
+                    if (response.data.success) {
+                        updateFileProgress(fileState.key, "COMPLETE");
+                        uploadResults.push({
+                            url: response.data.fileUrl,
+                            filename: fileState.file.name,
+                            path: response.data.filePath,
+                            id: response.data.fileId,
+                        });
+                    } else {
+                        throw new Error(response.data.message || 'Upload failed');
+                    }
+                } catch (err) {
+                    hasErrors = true;
+                    handleUploadError(err, fileState.file.name);
+                    updateFileProgress(fileState.key, "ERROR");
+                    uploadResults.push(null); // Maintain index even for failed uploads
+                }
+            }
+
+            // Update uploadRes with results in correct order
+            setUploadRes(uploadResults.filter(result => result !== null));
 
             // Only proceed to next step if no errors occurred
             if (!hasErrors) {
@@ -277,8 +299,8 @@ const AdminUpload = () => {
                 });
 
                 if (response.data.success) {
-                    setSubmitModalOpen(true);
                     toast.success(response.data.message || "Posts created successfully!");
+                    setSubmitModalOpen(true);
                 } else {
                     if (response.data.error?.includes('duplicate') || response.data.message?.includes('duplicate')) {
                         toast.error("Duplicate post: A post with similar content already exists");
@@ -333,6 +355,7 @@ const AdminUpload = () => {
                 <UploadDoneModel
                     isOpen={submitModalOpen}
                     setIsOpen={setSubmitModalOpen}
+                    onClose={resetUploadState}
                 />
             )}
         </div>
