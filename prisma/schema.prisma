@@ -149,3 +149,15 @@ model Favourite {
 
   @@unique([userId, postId])
 }
+
+model Announcement {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  tag       String
+  text      String
+  href      String
+  tagColor  String   @default("bg-primary/20 text-primary")
+  active    Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

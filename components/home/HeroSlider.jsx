@@ -9,7 +9,7 @@ import UniversitySwitcher from "../UniversitySwitcher";
 const slides = [
     {
         id: 1,
-        title: "Master Your Engineering Journey",
+        title: "Get Your College Notes",
         subtitle: " Access Notes, PYQ's, and Study Materials tailored for your university curriculum.",
         gradient: "from-primary/10 via-transparent to-secondary/10",
         pattern: "bg-grid-white/[0.02]",

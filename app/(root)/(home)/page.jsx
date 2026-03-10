@@ -6,6 +6,7 @@ import UniversitySelector from "@/components/UniversitySelector";
 import UniversitySwitcher from "@/components/UniversitySwitcher";
 import { useUniversity } from "@/libs/hooks/useUniversity";
 import HeroSlider from "@/components/home/HeroSlider";
+import AnnouncementRibbon from "@/components/home/AnnouncementRibbon";
 
 import { useSession } from "next-auth/react";
 
@@ -50,6 +51,9 @@ export default function Home() {
           allUniversities={allUniversities}
         />
       </div>
+
+      {/* Announcements */}
+      <AnnouncementRibbon />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">

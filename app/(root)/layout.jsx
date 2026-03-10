@@ -6,9 +6,9 @@ import AuthProvider from "@/components/layouts/ProviderLayouts";
 
 export const metadata = {
   applicationName: "LowStack",
-  title: "LowStack",
+  title: "LowStack: Stack For Students",
   description:
-    "study material web app for students.that makes studying easier for students and document management hassle-free for teachers",
+    "Lowstack is a stack for students providing rich notes, pyqs, syllabus from various university accross the country.",
   generator: "Next.js",
   manifest: "/manifest.json",
   appleWebApp: {
@@ -19,6 +19,11 @@ export const metadata = {
   },
   keywords: [
     "rgpv notes",
+    "lowstack",
+    "rgpv notes lowstack",
+    "aktu notes lowstack",
+    "aktu notes",
+    "exam notes engineering",
     "rgpv notes download",
     "btech rgpv notes",
     "btech cse notes",
@@ -28,7 +33,6 @@ export const metadata = {
     "lowstack.in",
     "lowstack notes",
     "study material ",
-    "studyhub",
     "LowStack",
   ],
   authors: [
